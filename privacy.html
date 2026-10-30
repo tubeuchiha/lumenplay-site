@@ -52,8 +52,9 @@
 
   <h2>3. 权限用途说明</h2>
   <ul>
-    <li><strong>INTERNET / 网络状态</strong>：播放网络视频；</li>
+    <li><strong>INTERNET / 网络状态（ACCESS_NETWORK_STATE）</strong>：播放网络视频；检测网络连接状态（如 Wi-Fi / 断网），用于自适应码率与断网提示；</li>
     <li><strong>视频媒体权限（READ_MEDIA_VIDEO）</strong>：列出您设备上的本地视频；</li>
+    <li><strong>存储权限（READ_EXTERNAL_STORAGE）</strong>：作用同上，仅在 Android 12 及更早版本的系统上申请（新版系统改用上述细分媒体权限）；</li>
     <li><strong>保持唤醒（WAKE_LOCK）</strong>：播放期间保持屏幕/网络低延迟状态；</li>
     <li><strong>音频设置（MODIFY_AUDIO_SETTINGS）</strong>：杜比直通时切换音频路由。</li>
   </ul>
