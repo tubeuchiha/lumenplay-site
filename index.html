@@ -36,6 +36,19 @@
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
   th { color: var(--muted); font-weight: 500; }
+  .price { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+           background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+           padding: 16px 20px; margin-bottom: 20px; }
+  .price b { font-size: 32px; color: var(--accent); letter-spacing: .5px; }
+  .price span { color: var(--muted); font-size: 14px; }
+  .pay { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 8px; }
+  .pay figure { background: var(--panel); border: 1px solid var(--border);
+                border-radius: 10px; padding: 14px; text-align: center; }
+  .pay img { width: 176px; height: 176px; object-fit: contain; background: #fff;
+             border-radius: 6px; display: block; }
+  .pay figcaption { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .pay .qr-missing { color: var(--muted); font-size: 13px; width: 176px; line-height: 1.6; }
+  td .tip { color: var(--muted); font-size: 13px; }
   footer { padding: 40px 0 60px; text-align: center; color: var(--muted);
            font-size: 13px; border-top: 1px solid var(--border); }
   footer a { margin: 0 10px; }
@@ -77,19 +90,72 @@
 
 <section class="wrap" id="purchase">
   <h2>购买与支持</h2>
-  <p style="color:var(--muted);font-size:14px">
-    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。
-    已上架 Google Play 的设备推荐在 Play 商店内直接购买（购买后自动解锁，重装自动恢复）。
-    无法使用 Google Play 的设备（电视盒、无 GMS 设备等）可通过官网渠道购买激活码：</p>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
+    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地视频播放始终免费；
+    网络媒体源（SMB / WebDAV / Jellyfin）为付费功能。
+    已上架 Google Play 的设备推荐在 Play 商店内直接购买（绑定 Google 账号，同账号多设备装好即自动解锁、重装自动恢复）。
+    无法使用 Google Play 的设备（电视 / 电视盒 / 无 Google 服务的手机）走官网激活码渠道：</p>
+
+  <div class="price">
+    <b>¥105</b>
+    <span>一次买断 · 含 <strong>2 台设备</strong>激活码（手机 + 电视正好覆盖）· 后续版本免费更新</span>
+  </div>
+
   <table>
-    <tr><th>步骤</th><th>说明</th></tr>
-    <tr><td>① 获取机器码</td><td>打开 App，点任一网络媒体源（SMB / WebDAV / Jellyfin），解锁对话框中显示 16 位机器码</td></tr>
-    <tr><td>② 付款并来邮</td><td>支付宝 / 微信转账 ¥105，将<strong>付款截图 + 16 位机器码</strong>发送至 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a></td></tr>
-    <tr><td>③ 收到激活码</td><td>付款后 24 小时内回复邮件（请保存该邮件：卸载重装后重新输入同一激活码即可恢复）</td></tr>
-    <tr><td>换机补发</td><td>凭原订单截图免费补发一次；恢复出厂或更换设备后机器码会变，需重新签发</td></tr>
+    <tr><th style="width:120px">步骤</th><th>说明</th></tr>
+    <tr>
+      <td>① 获取机器码</td>
+      <td>打开 App，点任一网络媒体源（SMB / WebDAV / Jellyfin），解锁对话框中显示 <strong>16 位机器码</strong>，点右侧按钮复制。
+        <span class="tip">手机、电视各取一个；两台设备就是两个机器码，请分别记录。</span></td>
+    </tr>
+    <tr>
+      <td>② 扫码付款</td>
+      <td>支付宝或微信扫码支付 ¥105，<strong>付款备注填机器码后 6 位</strong>（便于对账，不填也能处理）。
+        <span class="tip">付款码见下方「付款方式」。</span></td>
+    </tr>
+    <tr>
+      <td>③ 发送邮件</td>
+      <td>把<strong>付款截图 + 全部 16 位机器码</strong>发到
+        <a href="mailto:support@lumenplay.app?subject=LumenPlay%20%E8%B4%AD%E4%B9%B0%20%E6%9C%BA%E5%99%A8%E7%A0%81%20">support@lumenplay.app</a>，
+        邮件标题写「LumenPlay 购买 + 机器码后 6 位」。
+        <span class="tip">两台设备就把两个机器码分两行写在邮件正文里，一封邮件即可。</span></td>
+    </tr>
+    <tr>
+      <td>④ 收到激活码</td>
+      <td>通常 <strong>24 小时内</strong>回信（绝大多数当天）。每台设备对应一个激活码：回到 App 打开解锁对话框，粘贴激活码即可开通网络媒体源。
+        <span class="tip">请长期保存这封邮件——卸载重装后输入同一个激活码即可恢复，无需再次付费。</span></td>
+    </tr>
+    <tr>
+      <td>重装 / 恢复出厂</td>
+      <td>同一台设备重装系统：机器码不变，用原激活码即可。<br>
+        恢复出厂设置或换新设备：机器码会变，凭<strong>原付款凭证</strong>免费重签 1 次（30 天内限 1 次），发邮件说明情况即可。</td>
+    </tr>
+    <tr>
+      <td>第 3 台设备起</td>
+      <td>按台补购，发邮件到 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a> 说明设备数量，会收到补购报价与付款方式。</td>
+    </tr>
   </table>
+
+  <h3 style="font-size:16px;margin:26px 0 12px">付款方式</h3>
+  <div class="pay">
+    <figure>
+      <img src="img/pay-alipay.png" alt="支付宝收款码"
+           onerror="this.style.display='none';this.parentNode.querySelector('.qr-missing').style.display='block'">
+      <figcaption>支付宝</figcaption>
+      <p class="qr-missing" style="display:none">收款码更新中，请先发邮件到 support@lumenplay.app 获取付款方式。</p>
+    </figure>
+    <figure>
+      <img src="img/pay-wechat.png" alt="微信收款码"
+           onerror="this.style.display='none';this.parentNode.querySelector('.qr-missing').style.display='block'">
+      <figcaption>微信支付</figcaption>
+      <p class="qr-missing" style="display:none">收款码更新中，请先发邮件到 support@lumenplay.app 获取付款方式。</p>
+    </figure>
+  </div>
+
   <p style="color:var(--muted);font-size:13px;margin-top:14px">
-    使用问题与技术支持同样请联系 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>，我们通常在 24 小时内回复。</p>
+    没收到回信？先检查<strong>垃圾邮件箱</strong>，并把 support@lumenplay.app 加入白名单；
+    仍未收到请再发一封，或换个邮箱发送。
+    使用问题与技术支持同样联系 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>，通常在 24 小时内回复。</p>
 </section>
 
 <section class="wrap" id="opensource">
