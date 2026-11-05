@@ -5,21 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>隐私政策 — LumenPlay（流明）</title>
 <style>
+  /* 老 TV WebView（Chromium<49）不支持 CSS 变量：每处先写字面颜色兜底，
+     再写 var() 覆盖——新内核用变量，老内核保留字面色，避免深底黑字黑屏 */
   :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
           --muted:#8b949e; --accent:#e8b93c; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text);
+  body { background:#0d1117; color:#e6edf3;
+         background:var(--bg); color:var(--text);
          font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif; line-height:1.8; }
   .wrap { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
   h1 { font-size:30px; margin-bottom:6px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:32px; }
-  h2 { font-size:19px; margin:28px 0 10px; color:var(--accent); }
-  p, li { font-size:15px; color:var(--text); }
+  .meta { color:#8b949e; color:var(--muted); font-size:14px; margin-bottom:32px; }
+  h2 { font-size:19px; margin:28px 0 10px; color:#e8b93c; color:var(--accent); }
+  p, li { font-size:15px; color:#e6edf3; color:var(--text); }
   ul { padding-left:22px; margin:8px 0; }
-  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
+  .card { background:#161b22; border:1px solid #30363d;
+          background:var(--panel); border-color:var(--border); border-radius:10px;
           padding:20px 24px; margin:20px 0; }
-  a { color:var(--accent); }
-  footer { margin-top:48px; text-align:center; font-size:13px; color:var(--muted); }
+  a { color:#e8b93c; color:var(--accent); }
+  footer { margin-top:48px; text-align:center; font-size:13px; color:#8b949e; color:var(--muted); }
 </style>
 </head>
 <body>
