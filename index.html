@@ -11,33 +11,72 @@
     --text: #e6edf3; --muted: #8b949e; --accent: #e8b93c;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--text);
-         font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
-         line-height: 1.7; }
-  a { color: var(--accent); text-decoration: none; }
+  body {  background: #0d1117;
+    color: #e6edf3;
+  background: var(--bg); color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+  line-height: 1.7;}
+  a {  color: #e8b93c;
+  color: var(--accent); text-decoration: none;}
   a:hover { text-decoration: underline; }
   .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
   header { padding: 72px 0 48px; text-align: center; }
   header h1 { font-size: 42px; letter-spacing: 1px; }
-  header h1 .cn { color: var(--accent); font-size: 28px; margin-left: 10px; }
-  header p.tagline { color: var(--muted); font-size: 18px; margin-top: 12px; }
-  header p.badges { margin-top: 18px; color: var(--muted); font-size: 14px; }
-  .btn { display: inline-block; margin: 26px 8px 0; padding: 12px 34px;
-         border: 1px solid var(--accent); border-radius: 8px; font-size: 16px; }
-  .btn.primary { background: var(--accent); color: #111; font-weight: 600; }
+  header h1 .cn {  color: #e8b93c;
+  color: var(--accent); font-size: 28px; margin-left: 10px;}
+  header p.tagline {  color: #8b949e;
+  color: var(--muted); font-size: 18px; margin-top: 12px;}
+  header p.badges {  color: #8b949e;
+  margin-top: 18px; color: var(--muted); font-size: 14px;}
+  .btn {display: inline-block; margin: 26px 8px 0; padding: 12px 34px;
+    border: 1px solid #e8b93c;
+  border: 1px solid var(--accent); border-radius: 8px; font-size: 16px;}
+  .btn.primary {  background: #e8b93c;
+  background: var(--accent); color: #111; font-weight: 600;}
   .btn:hover { opacity: .85; text-decoration: none; }
-  section { padding: 36px 0; border-top: 1px solid var(--border); }
+  section {  border-top: 1px solid #30363d;
+  padding: 36px 0; border-top: 1px solid var(--border);}
   section h2 { font-size: 24px; margin-bottom: 20px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
-  .card { background: var(--panel); border: 1px solid var(--border);
-          border-radius: 10px; padding: 20px; }
-  .card h3 { font-size: 16px; margin-bottom: 8px; color: var(--accent); }
-  .card p { color: var(--muted); font-size: 14px; }
+  .card {  background: #161b22;
+    border: 1px solid #30363d;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px;}
+  .card h3 {  color: #e8b93c;
+  font-size: 16px; margin-bottom: 8px; color: var(--accent);}
+  .card p {  color: #8b949e;
+  color: var(--muted); font-size: 14px;}
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
-  th { color: var(--muted); font-weight: 500; }
-  footer { padding: 40px 0 60px; text-align: center; color: var(--muted);
-           font-size: 13px; border-top: 1px solid var(--border); }
+  th, td {  border-bottom: 1px solid #30363d;
+  padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left;}
+  th {  color: #8b949e;
+  color: var(--muted); font-weight: 500;}
+  .price {display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    background: #161b22;
+    border: 1px solid #30363d;
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: 16px 20px; margin-bottom: 20px;}
+  .price b {  color: #e8b93c;
+  font-size: 32px; color: var(--accent); letter-spacing: .5px;}
+  .price span {  color: #8b949e;
+  color: var(--muted); font-size: 14px;}
+  .pay { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 8px; }
+  .pay figure {  background: #161b22;
+    border: 1px solid #30363d;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px; text-align: center;}
+  .pay img { width: 176px; height: 176px; object-fit: contain; background: #fff;
+             border-radius: 6px; display: block; }
+  .pay figcaption {  color: #8b949e;
+  color: var(--muted); font-size: 13px; margin-top: 10px;}
+  .pay .qr-missing {  color: #8b949e;
+  color: var(--muted); font-size: 13px; width: 176px; line-height: 1.6;}
+  td .tip {  color: #8b949e;
+  color: var(--muted); font-size: 13px;}
+  footer {  color: #8b949e;
+  padding: 40px 0 60px; text-align: center; color: var(--muted);
+    border-top: 1px solid #30363d;
+  font-size: 13px; border-top: 1px solid var(--border);}
   footer a { margin: 0 10px; }
 </style>
 </head>
@@ -46,7 +85,7 @@
 <header class="wrap">
   <h1>LumenPlay<span class="cn">流明</span></h1>
   <p class="tagline">4K 原盘 / 大文件 / 自建媒体库最好用的 Android 播放器</p>
-  <p class="badges">支持杜比系 / DTS 系音频原码直通 · HDR10 / 杜比视界 · 一次买断，无广告无订阅</p>
+  <p class="badges">Jellyfin / Emby 双协议直连免费 · 杜比系 / DTS 系音频原码直通 · HDR10 / 杜比视界 · 一次买断，无广告无订阅</p>
   <a class="btn primary" href="#download">下载</a>
   <a class="btn" href="#features">功能一览</a>
 </header>
@@ -54,14 +93,18 @@
 <section class="wrap" id="features">
   <h2>功能一览</h2>
   <div class="grid">
-    <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪，长片不卡不飘。</p></div>
+    <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪；带宽与硬件允许的前提下，4K 长片流畅稳定。</p></div>
     <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传；杜比视界与 Atmos 在支持的设备上自动启用专用通路。</p></div>
     <div class="card"><h3>原码直通</h3><p>硬件设备满足条件下，LumenPlay 支持将杜比系 / DTS 系音频原始码流输出至功放解码，无损音轨原样送达。</p></div>
-    <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
-    <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：网络波动时自动调整清晰度，看片不断流；断网恢复后自动续上。</p></div>
-    <div class="card"><h3>大文件与高码率</h3><p>&gt;4GB 原盘文件全量支持；网络出状况也能接着看，不从头再来。</p></div>
-    <div class="card"><h3>字幕全格式</h3><p>SRT / ASS / SSA / PGS / TTML，外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
+    <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
+    <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按带宽自动切换清晰度，减少卡顿与缓冲。</p></div>
+    <div class="card"><h3>大文件与高码率</h3><p>&gt;4GB 原盘文件全量支持；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
+    <div class="card"><h3>支持多种格式字幕</h3><p>SRT / ASS / SSA / PGS / TTML，外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
   </div>
+  <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
+    <strong style="color:var(--text)">Jellyfin / Emby 双协议直连</strong>：两款主流家庭媒体服务器一套客户端全搞定——
+    同一个登录页填服务器地址即可，媒体库、继续观看、断点同步、多音轨字幕均可用，
+    原始文件直连播放，服务器无需转码。Emby / Jellyfin 用户不必再为第二个播放客户端付费。</p>
 </section>
 
 <section class="wrap" id="download">
@@ -77,19 +120,72 @@
 
 <section class="wrap" id="purchase">
   <h2>购买与支持</h2>
-  <p style="color:var(--muted);font-size:14px">
-    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。
-    已上架 Google Play 的设备推荐在 Play 商店内直接购买（购买后自动解锁，重装自动恢复）。
-    无法使用 Google Play 的设备（电视盒、无 GMS 设备等）可通过官网渠道购买激活码：</p>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
+    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地播放与 <strong>Jellyfin / Emby 直连永久免费</strong>；
+    SMB / WebDAV 等网络媒体源为付费功能。
+    已上架 Google Play 的设备推荐在 Play 商店内直接购买（绑定 Google 账号，同账号多设备装好即自动解锁、重装自动恢复）。
+    无法使用 Google Play 的设备（电视 / 电视盒 / 无 Google 服务的手机）走官网激活码渠道：</p>
+
+  <div class="price">
+    <b>¥105</b>
+    <span>一次买断 · 含 <strong>2 台设备</strong>激活码（手机 + 电视正好覆盖）· 后续版本免费更新</span>
+  </div>
+
   <table>
-    <tr><th>步骤</th><th>说明</th></tr>
-    <tr><td>① 获取机器码</td><td>打开 App，点任一网络媒体源（SMB / WebDAV / Jellyfin），解锁对话框中显示 16 位机器码</td></tr>
-    <tr><td>② 付款并来邮</td><td>支付宝 / 微信转账 ¥105，将<strong>付款截图 + 16 位机器码</strong>发送至 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a></td></tr>
-    <tr><td>③ 收到激活码</td><td>付款后 24 小时内回复邮件（请保存该邮件：卸载重装后重新输入同一激活码即可恢复）</td></tr>
-    <tr><td>换机补发</td><td>凭原订单截图免费补发一次；恢复出厂或更换设备后机器码会变，需重新签发</td></tr>
+    <tr><th style="width:120px">步骤</th><th>说明</th></tr>
+    <tr>
+      <td>① 获取机器码</td>
+      <td>打开 App，点 <strong>SMB / Windows 共享</strong>或 <strong>WebDAV / NAS</strong> 任一网络媒体源，解锁对话框中显示 <strong>16 位机器码</strong>，点右侧按钮复制。
+        <span class="tip">手机、电视各取一个；两台设备就是两个机器码，请分别记录。</span></td>
+    </tr>
+    <tr>
+      <td>② 扫码付款</td>
+      <td>支付宝或微信扫码支付 ¥105，<strong>付款备注填机器码后 6 位</strong>（便于对账，不填也能处理）。
+        <span class="tip">付款码见下方「付款方式」。</span></td>
+    </tr>
+    <tr>
+      <td>③ 发送邮件</td>
+      <td>把<strong>付款截图 + 全部 16 位机器码</strong>发到
+        <a href="mailto:support@lumenplay.app?subject=LumenPlay%20%E8%B4%AD%E4%B9%B0%20%E6%9C%BA%E5%99%A8%E7%A0%81%20">support@lumenplay.app</a>，
+        邮件标题写「LumenPlay 购买 + 机器码后 6 位」。
+        <span class="tip">两台设备就把两个机器码分两行写在邮件正文里，一封邮件即可。</span></td>
+    </tr>
+    <tr>
+      <td>④ 收到激活码</td>
+      <td>通常 <strong>24 小时内</strong>回信（绝大多数当天）。每台设备对应一个激活码：回到 App 打开解锁对话框，粘贴激活码即可开通网络媒体源。
+        <span class="tip">请长期保存这封邮件——卸载重装后输入同一个激活码即可恢复，无需再次付费。</span></td>
+    </tr>
+    <tr>
+      <td>重装 / 恢复出厂</td>
+      <td>同一台设备重装系统：机器码不变，用原激活码即可。<br>
+        恢复出厂设置或换新设备：机器码会变，凭<strong>原付款凭证</strong>免费重签 1 次（30 天内限 1 次），发邮件说明情况即可。</td>
+    </tr>
+    <tr>
+      <td>第 3 台设备起</td>
+      <td>按台补购，发邮件到 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a> 说明设备数量，会收到补购报价与付款方式。</td>
+    </tr>
   </table>
+
+  <h3 style="font-size:16px;margin:26px 0 12px">付款方式</h3>
+  <div class="pay">
+    <figure>
+      <img src="img/pay-alipay.png" alt="支付宝收款码"
+           onerror="this.style.display='none';this.parentNode.querySelector('.qr-missing').style.display='block'">
+      <figcaption>支付宝</figcaption>
+      <p class="qr-missing" style="display:none">收款码更新中，请先发邮件到 support@lumenplay.app 获取付款方式。</p>
+    </figure>
+    <figure>
+      <img src="img/pay-wechat.png" alt="微信收款码"
+           onerror="this.style.display='none';this.parentNode.querySelector('.qr-missing').style.display='block'">
+      <figcaption>微信支付</figcaption>
+      <p class="qr-missing" style="display:none">收款码更新中，请先发邮件到 support@lumenplay.app 获取付款方式。</p>
+    </figure>
+  </div>
+
   <p style="color:var(--muted);font-size:13px;margin-top:14px">
-    使用问题与技术支持同样请联系 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>，我们通常在 24 小时内回复。</p>
+    没收到回信？先检查<strong>垃圾邮件箱</strong>，并把 support@lumenplay.app 加入白名单；
+    仍未收到请再发一封，或换个邮箱发送。
+    使用问题与技术支持同样联系 <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>，通常在 24 小时内回复。</p>
 </section>
 
 <section class="wrap" id="opensource">
