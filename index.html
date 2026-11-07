@@ -85,7 +85,7 @@
 <header class="wrap">
   <h1>LumenPlay<span class="cn">流明</span></h1>
   <p class="tagline">为 4K 原盘文件、大文件与自建媒体库设计的 Android 播放器</p>
-  <p class="badges">Jellyfin / Emby / WebDAV / SMB 全部网络源免费 · 杜比系 / DTS 系音频原码直通（设备与功放支持时）· HDR10，杜比视界以设备支持为准 · 一次买断，无广告无订阅</p>
+  <p class="badges">Jellyfin / Emby / WebDAV / SMB 全部网络源免费 · 杜比系 / DTS 系音频原码直通（设备与功放支持时）· ISO / BDMV 原盘播放 · ASS/SSA 特效字幕 · 自动帧率匹配 · HDR10，杜比视界以设备支持为准 · 一次买断，无广告无订阅</p>
   <a class="btn primary" href="#download">下载</a>
   <a class="btn" href="#features">功能一览</a>
 </header>
@@ -96,6 +96,9 @@
     <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪；带宽与硬件允许的前提下，4K 长片流畅稳定。</p></div>
     <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传。杜比视界与 Atmos 需要设备本身支持：支持的设备上自动启用专用通路，不支持的设备上按 HDR10 基础层播放，画面不会变暗也不会偏色。</p></div>
     <div class="card"><h3>原码直通</h3><p>在设备与功放同时支持的条件下，LumenPlay 将杜比系 / DTS 系音频的原始码流输出至功放解码，不经过解码转码。设备或功放不支持该编码时，音轨自动解码为 PCM 输出，影片照常播放。</p></div>
+    <div class="card"><h3>原盘 ISO / BDMV 播放</h3><p>直接打开蓝光原盘的 ISO 镜像或 BDMV 目录结构（本地存储或 SMB 共享），自动定位正片开始播放，无需先解包、无需第三方工具。</p></div>
+    <div class="card"><h3>ASS / SSA 特效字幕</h3><p>内嵌 ASS / SSA 字幕按原样渲染：定位、字体样式与颜色、描边阴影、淡入淡出、卡拉OK 逐字上色、CJK 长句自动换行完整还原，4K 画面下清晰锐利。SRT / PGS / TTML 等其余字幕格式全版本可用。</p></div>
+    <div class="card"><h3>自动帧率匹配（免费）</h3><p>起播时把电视 / 显示器刷新率切换到与片源一致（如 23.976 帧的片源 → 23.976Hz），横移镜头不再一顿一顿。设备没有对应档位时静默不变，不打扰。免费提供，默认开启。</p></div>
     <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
     <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按带宽自动切换清晰度，减少卡顿与缓冲。</p></div>
     <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
@@ -123,9 +126,10 @@
 <section class="wrap" id="purchase">
   <h2>购买与支持</h2>
   <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
-    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地播放与<strong>全部网络源（Jellyfin / Emby / WebDAV / SMB）免费使用</strong>；
-    买断解锁的是音画能力：<strong>TrueHD / DTS-HD 原码直通</strong>（设备与功放同时支持时）。
-    未解锁时无损音轨自动解码为 PCM 输出，影片照常完整播放。
+    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地播放与<strong>全部网络源（Jellyfin / Emby / WebDAV / SMB）免费使用</strong>，自动帧率匹配同样免费。
+    买断解锁的是音画能力：<strong>TrueHD / DTS-HD 原码直通</strong>（设备与功放同时支持时）、<strong>原盘 ISO / BDMV 播放</strong>、<strong>ASS / SSA 特效字幕</strong>。
+    <strong>7 天全功能试用</strong>：从首次用到上述任一付费能力开始计算（例如第一次播放杜比 / DTS 音轨的片源，或第一次使用原盘 / 特效字幕），试用内三项能力全部可用，无需注册、无需任何账号；
+    试用结束后回到免费版——无损音轨自动解码为 PCM 输出，影片照常完整播放。
     已上架 Google Play 的设备推荐在 Play 商店内直接购买（绑定 Google 账号，同账号多设备装好即自动解锁、重装自动恢复）。
     无法使用 Google Play 的设备（电视 / 电视盒 / 无 Google 服务的手机）走官网激活码渠道：</p>
 
