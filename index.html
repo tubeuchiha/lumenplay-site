@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LumenPlay（流明）— 4K 原盘播放器 · Android</title>
-<meta name="description" content="LumenPlay：4K 原盘、大文件、自建媒体库最好用的 Android 播放器。C/C++ 内核，硬件解码，HDR / 杜比视界。一次买断，无广告、无订阅、不收集数据。">
+<meta name="description" content="LumenPlay：为 4K 原盘文件、大文件与自建媒体库设计的 Android 播放器。C/C++ 内核，硬件解码，HDR10 / 杜比视界（以设备支持为准）。一次买断，无广告、无订阅、不收集数据。">
 <style>
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
@@ -84,8 +84,8 @@
 
 <header class="wrap">
   <h1>LumenPlay<span class="cn">流明</span></h1>
-  <p class="tagline">4K 原盘 / 大文件 / 自建媒体库最好用的 Android 播放器</p>
-  <p class="badges">Jellyfin / Emby 双协议直连免费 · 杜比系 / DTS 系音频原码直通 · HDR10 / 杜比视界 · 一次买断，无广告无订阅</p>
+  <p class="tagline">为 4K 原盘文件、大文件与自建媒体库设计的 Android 播放器</p>
+  <p class="badges">Jellyfin / Emby / WebDAV / SMB 全部网络源免费 · 杜比系 / DTS 系音频原码直通（设备与功放支持时）· HDR10，杜比视界以设备支持为准 · 一次买断，无广告无订阅</p>
   <a class="btn primary" href="#download">下载</a>
   <a class="btn" href="#features">功能一览</a>
 </header>
@@ -94,17 +94,19 @@
   <h2>功能一览</h2>
   <div class="grid">
     <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪；带宽与硬件允许的前提下，4K 长片流畅稳定。</p></div>
-    <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传；杜比视界与 Atmos 在支持的设备上自动启用专用通路。</p></div>
-    <div class="card"><h3>原码直通</h3><p>硬件设备满足条件下，LumenPlay 支持将杜比系 / DTS 系音频原始码流输出至功放解码，无损音轨原样送达。</p></div>
+    <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传。杜比视界与 Atmos 需要设备本身支持：支持的设备上自动启用专用通路，不支持的设备上按 HDR10 基础层播放，画面不会变暗也不会偏色。</p></div>
+    <div class="card"><h3>原码直通</h3><p>在设备与功放同时支持的条件下，LumenPlay 将杜比系 / DTS 系音频的原始码流输出至功放解码，不经过解码转码。设备或功放不支持该编码时，音轨自动解码为 PCM 输出，影片照常播放。</p></div>
     <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
     <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按带宽自动切换清晰度，减少卡顿与缓冲。</p></div>
-    <div class="card"><h3>大文件与高码率</h3><p>&gt;4GB 原盘文件全量支持；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
+    <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
     <div class="card"><h3>支持多种格式字幕</h3><p>SRT / ASS / SSA / PGS / TTML，外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
   </div>
   <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
     <strong style="color:var(--text)">Jellyfin / Emby 双协议直连</strong>：两款主流家庭媒体服务器一套客户端全搞定——
-    同一个登录页填服务器地址即可，媒体库、继续观看、断点同步、多音轨字幕均可用，
-    原始文件直连播放，服务器无需转码。Emby / Jellyfin 用户不必再为第二个播放客户端付费。</p>
+    同一个登录页填服务器地址即可，媒体库、继续观看、断点同步、多音轨字幕均可用。
+    客户端能解码的文件直接播放，不经过服务器转码；遇到客户端解不了的编码（例如部分 AV1 片源），
+    由服务器转码后再播，不会黑屏。<strong style="color:var(--text)">全部网络源（含 WebDAV / SMB）免费使用</strong>，
+    Emby / Jellyfin 用户不必再为第二个播放客户端付费。</p>
 </section>
 
 <section class="wrap" id="download">
@@ -121,8 +123,9 @@
 <section class="wrap" id="purchase">
   <h2>购买与支持</h2>
   <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
-    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地播放与 <strong>Jellyfin / Emby 直连永久免费</strong>；
-    SMB / WebDAV 等网络媒体源为付费功能。
+    LumenPlay 一次买断，永久使用，无广告、无订阅、不收集数据。本地播放与<strong>全部网络源（Jellyfin / Emby / WebDAV / SMB）免费使用</strong>；
+    买断解锁的是音画能力：<strong>TrueHD / DTS-HD 原码直通</strong>（设备与功放同时支持时）。
+    未解锁时无损音轨自动解码为 PCM 输出，影片照常完整播放。
     已上架 Google Play 的设备推荐在 Play 商店内直接购买（绑定 Google 账号，同账号多设备装好即自动解锁、重装自动恢复）。
     无法使用 Google Play 的设备（电视 / 电视盒 / 无 Google 服务的手机）走官网激活码渠道：</p>
 
@@ -135,7 +138,7 @@
     <tr><th style="width:120px">步骤</th><th>说明</th></tr>
     <tr>
       <td>① 获取机器码</td>
-      <td>打开 App，点 <strong>SMB / Windows 共享</strong>或 <strong>WebDAV / NAS</strong> 任一网络媒体源，解锁对话框中显示 <strong>16 位机器码</strong>，点右侧按钮复制。
+      <td>打开 App，进入<strong>播放设置 → 解锁完整版</strong>，对话框中显示 <strong>16 位机器码</strong>，点右侧按钮复制。
         <span class="tip">手机、电视各取一个；两台设备就是两个机器码，请分别记录。</span></td>
     </tr>
     <tr>
@@ -152,7 +155,7 @@
     </tr>
     <tr>
       <td>④ 收到激活码</td>
-      <td>通常 <strong>24 小时内</strong>回信（绝大多数当天）。每台设备对应一个激活码：回到 App 打开解锁对话框，粘贴激活码即可开通网络媒体源。
+      <td>通常 <strong>24 小时内</strong>回信（绝大多数当天）。每台设备对应一个激活码：回到 App 的<strong>播放设置 → 解锁完整版</strong>，粘贴激活码即可解锁原码直通。
         <span class="tip">请长期保存这封邮件——卸载重装后输入同一个激活码即可恢复，无需再次付费。</span></td>
     </tr>
     <tr>
