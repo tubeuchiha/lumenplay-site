@@ -57,6 +57,11 @@
   <h2>3. 权限用途说明</h2>
   <ul>
     <li><strong>INTERNET / 网络状态（ACCESS_NETWORK_STATE）</strong>：播放网络视频；检测网络连接状态（如 Wi-Fi / 断网），用于自适应码率与断网提示；</li>
+    <li><strong>Wi-Fi 组播（CHANGE_WIFI_MULTICAST_STATE）</strong>：仅用于在局域网内自动发现媒体服务器
+        （局域网 NAS、SMB 共享、Jellyfin/Emby、DLNA）。Android 为省电默认丢弃 Wi-Fi 组播包，
+        应用必须在使用期间临时持有「组播锁」才能收到服务器发出的发现广播 ——
+        <strong>该锁只在扫描的那几秒内持有，扫描结束立即释放</strong>。
+        此权限不会开启任何持续监听，也不涉及位置信息（本应用不申请定位权限）；</li>
     <li><strong>视频媒体权限（READ_MEDIA_VIDEO）</strong>：列出您设备上的本地视频；</li>
     <li><strong>存储权限（READ_EXTERNAL_STORAGE）</strong>：作用同上，仅在 Android 12 及更早版本的系统上申请（新版系统改用上述细分媒体权限）；</li>
     <li><strong>保持唤醒（WAKE_LOCK）</strong>：播放期间保持屏幕/网络低延迟状态；</li>

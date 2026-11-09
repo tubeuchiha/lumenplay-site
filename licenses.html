@@ -79,6 +79,23 @@
 </section>
 
 <section>
+  <h2>字幕渲染与排版组件（libass 编译链）</h2>
+  <p>本应用使用下列组件承担 ASS / SSA 特效字幕的渲染与排版（含文字整形、双向文本与断行），
+     编译为静态代码链接进应用主库。</p>
+  <table>
+    <tr><th>组件</th><th>版本</th><th>许可</th><th>用途</th></tr>
+    <tr><td><a href="https://github.com/libass/libass">libass</a></td><td>0.17.4</td><td>ISC</td><td>ASS / SSA 字幕渲染</td></tr>
+    <tr><td><a href="https://freetype.org">FreeType</a></td><td>2.13.3</td><td>FreeType License（BSD 风格）/ GPLv2 双许可，此处按 FTL 分发</td><td>字体光栅化</td></tr>
+    <tr><td><a href="https://github.com/fribidi/fribidi">GNU FriBidi</a></td><td>1.0.16</td><td>LGPL-2.1 及以上</td><td>双向文本算法</td></tr>
+    <tr><td><a href="https://github.com/harfbuzz/harfbuzz">HarfBuzz</a></td><td>8.5.0</td><td>MIT</td><td>复杂文字整形</td></tr>
+    <tr><td><a href="https://github.com/adah1972/libunibreak">libunibreak</a></td><td>5.1</td><td>zlib / libpng 许可</td><td>换行断行算法</td></tr>
+  </table>
+  <p>各组件均使用未修改的上游源码；libass 相关的许可全文见其项目仓库
+     <code>COPYING</code> 文件。FriBidi 按 LGPL-2.1+ 静态链接：如需对应用进行重新链接，
+     可通过邮箱索取对应目标文件与构建配置。</p>
+</section>
+
+<section>
   <h2>Apache License 2.0</h2>
   <table>
     <tr><th>组件</th><th>版本</th><th>用途</th></tr>
@@ -129,7 +146,7 @@
 <section>
   <h2>说明</h2>
   <p>各组件许可全文可在其项目官网获取。上述清单对应发布版 APK 实际打包内容；
-     依赖版本更新后本页会同步修订。本清单最后一次更新：2026-10-29。</p>
+     依赖版本更新后本页会同步修订。本清单最后一次更新：2026-11-08。</p>
 </section>
 
 </div>
