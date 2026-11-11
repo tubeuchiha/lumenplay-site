@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LumenPlay 设备激活</title>
+<!--
+  激活承接页（阶段 0，零服务器）：TV 解锁卡的二维码指向本页并携带
+  ?m=<机器码>&c=<设备短码>。页面只在本机展示/复制信息，无后端接收——
+  用户把「复制激活信息」生成的内容发给发码方（微信/QQ/邮箱）即完成申请。
+  ★ 收件邮箱 support@lumenplay.app（Cloudflare Email Routing 别名，路由配置好后生效）。
+-->
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #e8b93c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    line-height: 1.7; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .label { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
+  .mono { font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 18px; letter-spacing: 1px; word-break: break-all; }
+  .big { font-size: 30px; letter-spacing: 6px; }
+  textarea { width: 100%; min-height: 88px; background: #0d1117;
+    color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit; resize: vertical; }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  button, a.btn { display: inline-block; background: var(--accent); color: #111;
+    border: none; border-radius: 8px; padding: 10px 18px; font-size: 14px;
+    font-weight: 600; cursor: pointer; text-decoration: none; }
+  button.ghost, a.ghost { background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+  .tip { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  #copied { color: var(--accent); font-size: 13px; margin-left: 10px; display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LumenPlay 设备激活</h1>
+  <p class="sub">设备信息已自动从扫码带入，确认无误后把申请信息发给发码方即可。</p>
+
+  <div class="card">
+    <div class="label">设备机器码（自动带入）</div>
+    <div class="mono" id="machine">—</div>
+  </div>
+
+  <div class="card">
+    <div class="label">设备短码（自动带入）</div>
+    <div class="mono big" id="code">—</div>
+  </div>
+
+  <!-- 阶段 1：把收到的激活码投给电视（TV 每 3 秒轮询 /api/device/poll，
+       拿到后自动解锁）。用户全程不需要在电视上输入任何东西。 -->
+  <div class="card">
+    <div class="label">已收到激活码？粘贴到这里，电视会自动解锁</div>
+    <textarea id="activation" placeholder="把邮件里的激活码整段粘贴进来（不要手打）"></textarea>
+    <div class="row">
+      <button id="redeemBtn">提交到电视</button>
+      <span id="redeemMsg" class="tip"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">您的联系方式 / 订单号（选填，发码方核对用）</div>
+    <textarea id="note" placeholder="例如：微信昵称 xxx，支付宝订单号后 6 位 xxxx"></textarea>
+  </div>
+
+  <div class="row">
+    <button id="copyBtn">复制激活信息</button><span id="copied">已复制 ✓</span>
+    <a class="ghost" id="mailBtn" href="#">打开邮件发给发码方</a>
+  </div>
+  <p class="tip">第一步：点「复制激活信息」发给发码方申请激活码（机器码 / 短码已自动带入）。第二步：收到激活码后回到本页（或重新扫电视上的二维码），把激活码粘贴到上方输入框点「提交到电视」，电视会自动解锁——全程无需在电视上输入任何内容。</p>
+</div>
+
+<script>
+  var q = new URLSearchParams(location.search);
+  var machine = (q.get('m') || '').trim();
+  var code = (q.get('c') || '').trim();
+  var shownMachine = /^[0-9a-f]{16}$/i.test(machine) ? machine : '（未携带机器码，请在 App 解锁对话框里查看）';
+  var shownCode = /^\d{6}$/.test(code)
+    ? code.slice(0, 3) + ' ' + code.slice(3)
+    : (code || '（未携带短码）');
+  document.getElementById('machine').textContent = shownMachine;
+  document.getElementById('code').textContent = shownCode;
+
+  function buildText() {
+    return 'LumenPlay 激活申请\n' +
+      '机器码：' + shownMachine + '\n' +
+      '设备短码：' + shownCode + '\n' +
+      '联系方式/订单号：' + (document.getElementById('note').value || '（未填）');
+  }
+  var SUPPORT_MAIL = 'support@lumenplay.app'; // 真实别名（Cloudflare Email Routing → 私人 Gmail）；★路由配好后才收得到信
+
+  document.getElementById('copyBtn').addEventListener('click', function () {
+    var text = buildText();
+    var done = function () {
+      var el = document.getElementById('copied');
+      el.style.display = 'inline';
+      setTimeout(function () { el.style.display = 'none'; }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+    } else { fallback(text); done(); }
+  });
+  function fallback(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  // mailto 链接必须动态拼：备注是用户后填的，静态 href 会把它漏掉
+  function refreshMailto() {
+    document.getElementById('mailBtn').href = 'mailto:' + SUPPORT_MAIL +
+      '?subject=' + encodeURIComponent('LumenPlay 激活申请') +
+      '&body=' + encodeURIComponent(buildText());
+  }
+  document.getElementById('note').addEventListener('input', refreshMailto);
+  refreshMailto();
+
+  // ---- 阶段 1：把激活码投给电视 ----
+  // 电视端解锁卡开着时会每 3 秒轮询 /api/device/poll?c=<短码>，本页提交后
+  // 电视几秒内自动完成激活，用户无需在电视上输入任何内容。
+  var redeemBtn = document.getElementById('redeemBtn');
+  var redeemMsg = document.getElementById('redeemMsg');
+  function showRedeem(text, isError) {
+    redeemMsg.textContent = text;
+    redeemMsg.style.color = isError ? '#ff7a7a' : 'var(--accent)';
+    redeemMsg.style.display = 'inline';
+  }
+  var ERR = {
+    code_not_live: '电视上的短码已过期：请在电视上重新打开解锁框，再扫一次二维码',
+    already_used: '这个短码已经提交过激活码了，请回到电视查看结果',
+    bad_activation: '激活码格式不对，请整段复制粘贴，不要手打',
+    rate_limited: '提交太频繁，请稍后再试',
+    bad_code: '页面缺少设备短码，请重新扫描电视上的二维码'
+  };
+  redeemBtn.addEventListener('click', function () {
+    var act = (document.getElementById('activation').value || '').trim();
+    if (!/^\d{6}$/.test(code)) { showRedeem(ERR.bad_code, true); return; }
+    if (!act) { showRedeem('请先粘贴激活码', true); return; }
+    redeemBtn.disabled = true;
+    showRedeem('正在提交…', false);
+    fetch('/api/device/submit', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ code: code, activation: act })
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        return { ok: r.ok, j: j };
+      });
+    }).then(function (ret) {
+      if (ret.ok && ret.j.ok) {
+        showRedeem('已提交，电视会在几秒内自动解锁 ✓', false);
+        redeemBtn.textContent = '已提交';
+        return;
+      }
+      showRedeem(ERR[ret.j.error] || '提交失败，请稍后重试', true);
+      redeemBtn.disabled = false;
+    }).catch(function () {
+      showRedeem('网络不通，请检查手机网络后重试', true);
+      redeemBtn.disabled = false;
+    });
+  });
+</script>
+</body>
+</html>

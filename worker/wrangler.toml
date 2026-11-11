@@ -1,0 +1,18 @@
+# LumenPlay 短码兑换 API（Cloudflare Workers）
+#
+# 部署（一次性，约 3 分钟）：
+#   1) 控制台 → Workers & Pages → KV → Create namespace，名字 DEVICE_KV，
+#      把生成的 id 填到下面 id = "..."（或命令行 `npx wrangler kv namespace create DEVICE_KV`）
+#   2) npx wrangler deploy            # 首次会把 Worker 发到 <name>.<账号>.workers.dev
+#   3) 控制台 → 该 Worker → Settings → Triggers → Add route：
+#        Route: lumenplay.app/api/*     Zone: lumenplay.app
+#      （GitHub Pages 继续承担静态页，只有 /api/* 命中 Worker）
+#   4) 验证：curl "https://lumenplay.app/api/device/poll?c=123456" 应返回
+#        {"status":"waiting"} 且 CORS 头齐全
+name = "lumenplay-device"
+main = "device-code.js"
+compatibility_date = "2026-11-01"
+
+[[kv_namespaces]]
+binding = "DEVICE_KV"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
