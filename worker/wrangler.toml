@@ -16,6 +16,11 @@ name = "lumenplay-device"
 main = "device-code.js"
 compatibility_date = "2026-11-01"
 
+# 部署时自动绑定路由（无需在控制台手动加）
+routes = [
+  { pattern = "lumenplay.app/api/*", zone_name = "lumenplay.app" }
+]
+
 [[kv_namespaces]]
 binding = "DEVICE_KV"
-id = "REPLACE_WITH_KV_NAMESPACE_ID"
+id = "c9e9153b8ea940c4a798435ca10c8454"
