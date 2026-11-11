@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LumenPlay 发码投递（内部）</title>
+<!--
+  发码方一键投递页（内部使用，勿对外分享）：
+  收到用户申请邮件（机器码 + 短码）→ 本地签发激活码 → 打开本页
+  （建议书签 https://lumenplay.app/admin.html?t=<ADMIN_TOKEN>，令牌自动带入）
+  → 粘贴激活码点「投递到电视」：
+    - 用户电视正开着解锁框 → 3 秒内自动解锁（下一拍轮询取走）；
+    - 用户还没开解锁框 → 码保留 7 天，期间任何时候打开解锁框即自动解锁。
+  鉴权走 Worker secret ADMIN_TOKEN（x-admin-token 头），本页不存储任何码。
+-->
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #e8b93c; --danger: #ff7a7a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text);
+    font-family: "PingFang SC", "Microsoft YaHei", -apple-system, sans-serif;
+    line-height: 1.7; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 32px 24px 64px; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .card { background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .label { color: var(--muted); font-size: 13px; margin-bottom: 6px; }
+  input, textarea { width: 100%; background: #0d1117; color: var(--text);
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; font-size: 14px; font-family: inherit; }
+  textarea { min-height: 110px; resize: vertical;
+    font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  button, a.btn { display: inline-block; background: var(--accent); color: #111;
+    border: none; border-radius: 8px; padding: 10px 18px; font-size: 14px;
+    font-weight: 600; cursor: pointer; text-decoration: none; }
+  button.ghost { background: transparent; color: var(--accent);
+    border: 1px solid var(--accent); }
+  .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+  .tip { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  #msg { font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>LumenPlay 发码投递</h1>
+  <p class="sub">内部页：把签好的激活码直接投到用户电视，用户打开解锁框即自动完成激活。</p>
+
+  <div class="card">
+    <div class="label">设备短码（6 位，来自用户申请邮件）</div>
+    <input id="code" inputmode="numeric" maxlength="6" placeholder="例如 621741">
+  </div>
+
+  <div class="card">
+    <div class="label">激活码（本地签发工具生成，整段粘贴）</div>
+    <textarea id="activation" placeholder="两段 base64url 用点连接，整段粘贴，不要手打"></textarea>
+  </div>
+
+  <div class="card">
+    <div class="label">ADMIN_TOKEN（书签带 ?t= 时自动填充）</div>
+    <input id="token" type="password" placeholder="Worker secret ADMIN_TOKEN">
+  </div>
+
+  <div class="row">
+    <button id="deliverBtn">投递到电视</button>
+    <button id="statusBtn" class="ghost">查状态</button>
+    <span id="msg"></span>
+  </div>
+
+  <p class="tip" id="hint">建议书签 https://lumenplay.app/admin.html?t=&lt;令牌&gt;，以后打开短码/令牌自动带入，只需粘贴激活码。投递成功后：电视正开解锁框 → 几秒内自动解锁；没开 → 码保留 7 天，期间打开即解锁。</p>
+</div>
+
+<script>
+  var q = new URLSearchParams(location.search);
+  document.getElementById('code').value = (q.get('c') || '').trim();
+  document.getElementById('token').value = (q.get('t') || '').trim();
+
+  var msg = document.getElementById('msg');
+  function show(text, isError) {
+    msg.textContent = text;
+    msg.style.color = isError ? 'var(--danger)' : 'var(--accent)';
+  }
+  function readForm() {
+    return {
+      code: document.getElementById('code').value.trim(),
+      activation: document.getElementById('activation').value.trim(),
+      token: document.getElementById('token').value.trim(),
+    };
+  }
+  function call(path, opts) {
+    return fetch(path, opts)
+      .then(function (r) {
+        return r.json().catch(function () { return {}; }).then(function (j) {
+          return { ok: r.ok, status: r.status, j: j };
+        });
+      });
+  }
+  var ERR = {
+    unauthorized: '令牌不对：检查 ADMIN_TOKEN（或用带 ?t= 的书签打开）',
+    bad_code: '短码必须是 6 位数字',
+    bad_activation: '激活码格式不对（两段 base64url 用点连接，整段粘贴）',
+    bad_json: '请求体异常，请重试'
+  };
+
+  document.getElementById('deliverBtn').addEventListener('click', function () {
+    var f = readForm();
+    if (!/^\d{6}$/.test(f.code)) { show(ERR.bad_code, true); return; }
+    if (!f.activation) { show('请先粘贴激活码', true); return; }
+    if (!f.token) { show(ERR.unauthorized, true); return; }
+    var btn = this; btn.disabled = true; show('正在投递…', false);
+    call('/api/device/admin-deliver', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-admin-token': f.token },
+      body: JSON.stringify({ code: f.code, activation: f.activation })
+    }).then(function (ret) {
+      if (ret.ok && ret.j.ok) {
+        show(ret.j.live ? '已投递，用户电视正开着解锁框，几秒内自动解锁 ✓'
+                        : '已投递（保留 7 天），用户打开解锁框即自动解锁 ✓', false);
+        btn.textContent = '已投递';
+        return;
+      }
+      show(ERR[ret.j.error] || ('投递失败（HTTP ' + ret.status + '）'), true);
+      btn.disabled = false;
+    }).catch(function () { show('网络不通，请检查网络后重试', true); btn.disabled = false; });
+  });
+
+  document.getElementById('statusBtn').addEventListener('click', function () {
+    var f = readForm();
+    if (!/^\d{6}$/.test(f.code)) { show(ERR.bad_code, true); return; }
+    if (!f.token) { show(ERR.unauthorized, true); return; }
+    call('/api/device/admin-status?c=' + f.code + '&t=' + encodeURIComponent(f.token), {})
+      .then(function (ret) {
+        if (!ret.ok) { show(ERR[ret.j.error] || ('查询失败（HTTP ' + ret.status + '）'), true); return; }
+        show(ret.j.delivered ? '已投递、等待电视取走（未消费）' : '没有待取的码（未投递或已被电视消费）', false);
+      })
+      .catch(function () { show('网络不通，请检查网络后重试', true); });
+  });
+</script>
+</body>
+</html>

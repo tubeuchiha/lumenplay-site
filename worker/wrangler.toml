@@ -4,10 +4,13 @@
 #   1) 控制台 → Workers & Pages → KV → Create namespace，名字 DEVICE_KV，
 #      把生成的 id 填到下面 id = "..."（或命令行 `npx wrangler kv namespace create DEVICE_KV`）
 #   2) npx wrangler deploy            # 首次会把 Worker 发到 <name>.<账号>.workers.dev
-#   3) 控制台 → 该 Worker → Settings → Triggers → Add route：
+#   3) 设置 admin secret（发码方一键投递的令牌，自定长随机串）：
+#        npx wrangler secret put ADMIN_TOKEN
+#      书签 https://lumenplay.app/admin.html?t=<这个令牌> 即可一键投递
+#   4) 控制台 → 该 Worker → Settings → Triggers → Add route：
 #        Route: lumenplay.app/api/*     Zone: lumenplay.app
 #      （GitHub Pages 继续承担静态页，只有 /api/* 命中 Worker）
-#   4) 验证：curl "https://lumenplay.app/api/device/poll?c=123456" 应返回
+#   5) 验证：curl "https://lumenplay.app/api/device/poll?c=123456" 应返回
 #        {"status":"waiting"} 且 CORS 头齐全
 name = "lumenplay-device"
 main = "device-code.js"
