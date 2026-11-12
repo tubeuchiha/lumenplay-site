@@ -44,10 +44,10 @@
   .guide p { margin: 0 0 8px; }
   .guide p:last-of-type { margin-bottom: 0; }
   .guide b { color: var(--accent); }
-  .guide .chk { display: flex; align-items: center; gap: 8px;
-    font-weight: 600; cursor: pointer; margin-top: 10px; }
-  .guide .chk input { width: auto; accent-color: var(--accent); }
-  .guide .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0 26px; }
+  .chk { display: flex; align-items: center; gap: 8px;
+    font-weight: 600; cursor: pointer; margin: 14px 0 0; }
+  .chk input { width: auto; accent-color: var(--accent); }
+  .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0 26px; }
   #copied { color: var(--accent); font-size: 13px; margin-left: 10px; display: none; }
 </style>
 </head>
@@ -74,9 +74,10 @@
   <div class="guide">
     <p>第一步：点下方「复制激活信息」（<b>机器码 / 短码已自动带入</b>），<b>发邮件到 support@lumenplay.app</b> 申请激活码；待 LumenPlay 官方给你回邮件（邮件里有激活码，一般 24 小时内回复）后执行第二步。</p>
     <p>第二步：收到激活码后回到本页（或重新扫电视上的二维码），把激活码粘贴到最下方输入框点「提交到电视」，电视会自动解锁。</p>
-    <label class="chk"><input type="checkbox" id="helpDeliver"> 是否要求 LumenPlay 官方帮忙激活你的电视</label>
-    <p class="hint">勾选后，官方会把激活码直接投递到你的电视——收到回信后回到电视打开解锁框即可自动解锁，无需回本页粘贴。</p>
   </div>
+
+  <label class="chk"><input type="checkbox" id="helpDeliver"> 要求 LumenPlay 官方解锁 TV 端的付费功能项</label>
+  <p class="hint">请确保你的 TV 设备网络畅通且打开了 LumenPlay 软件。</p>
 
   <div class="row">
     <button id="copyBtn">复制激活信息</button><span id="copied">已复制 ✓</span>
