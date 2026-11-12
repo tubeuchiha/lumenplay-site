@@ -39,6 +39,15 @@
     border: 1px solid var(--accent); }
   .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
   .tip { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  .guide { background: var(--panel); border: 1px solid var(--accent);
+    border-radius: 10px; padding: 14px 18px; margin: 16px 0 4px; font-size: 14px; }
+  .guide p { margin: 0 0 8px; }
+  .guide p:last-of-type { margin-bottom: 0; }
+  .guide b { color: var(--accent); }
+  .guide .chk { display: flex; align-items: center; gap: 8px;
+    font-weight: 600; cursor: pointer; margin-top: 10px; }
+  .guide .chk input { width: auto; accent-color: var(--accent); }
+  .guide .hint { color: var(--muted); font-size: 13px; margin: 6px 0 0 26px; }
   #copied { color: var(--accent); font-size: 13px; margin-left: 10px; display: none; }
 </style>
 </head>
@@ -62,11 +71,17 @@
     <textarea id="note" placeholder="例如：微信昵称 xxx，支付宝订单号后 6 位 xxxx"></textarea>
   </div>
 
+  <div class="guide">
+    <p>第一步：点下方「复制激活信息」（<b>机器码 / 短码已自动带入</b>），<b>发邮件到 support@lumenplay.app</b> 申请激活码；待 LumenPlay 官方给你回邮件（邮件里有激活码，一般 24 小时内回复）后执行第二步。</p>
+    <p>第二步：收到激活码后回到本页（或重新扫电视上的二维码），把激活码粘贴到最下方输入框点「提交到电视」，电视会自动解锁。</p>
+    <label class="chk"><input type="checkbox" id="helpDeliver"> 是否要求 LumenPlay 官方帮忙激活你的电视</label>
+    <p class="hint">勾选后，官方会把激活码直接投递到你的电视——收到回信后回到电视打开解锁框即可自动解锁，无需回本页粘贴。</p>
+  </div>
+
   <div class="row">
     <button id="copyBtn">复制激活信息</button><span id="copied">已复制 ✓</span>
     <a class="ghost" id="mailBtn" href="#">打开邮件发给发码方（support@lumenplay.app）</a>
   </div>
-  <p class="tip">第一步：点「复制激活信息」发给发码方 support@lumenplay.app 申请激活码（机器码 / 短码已自动带入）。第二步：收到激活码后回到本页（或重新扫电视上的二维码），把激活码粘贴到下方输入框点「提交到电视」，电视会自动解锁——全程无需在电视上输入任何内容。若发码方已提前投递激活码，直接回到电视打开解锁框即可自动解锁，无需在本页操作。</p>
 
   <!-- 阶段 1：把收到的激活码投给电视（TV 每 3 秒轮询 /api/device/poll，
        拿到后自动解锁）。用户全程不需要在电视上输入任何东西。 -->
@@ -91,11 +106,18 @@
   document.getElementById('machine').textContent = shownMachine;
   document.getElementById('code').textContent = shownCode;
 
+  function helpRequest() {
+    var help = document.getElementById('helpDeliver').checked;
+    return '请求官方帮忙激活电视：' + (help
+      ? '是，请把激活码直接投递到我的电视（我会保持电视解锁框打开等待）'
+      : '否，请把激活码回复到本邮箱，我自己在本页粘贴提交');
+  }
   function buildText() {
     return 'LumenPlay 激活申请\n' +
       '机器码：' + shownMachine + '\n' +
       '设备短码：' + shownCode + '\n' +
-      '联系方式/订单号：' + (document.getElementById('note').value || '（未填）');
+      '联系方式/订单号：' + (document.getElementById('note').value || '（未填）') + '\n' +
+      helpRequest();
   }
   var SUPPORT_MAIL = 'support@lumenplay.app'; // 真实别名（Cloudflare Email Routing → 私人 Gmail）；★路由配好后才收得到信
 
@@ -122,6 +144,7 @@
       '&body=' + encodeURIComponent(buildText());
   }
   document.getElementById('note').addEventListener('input', refreshMailto);
+  document.getElementById('helpDeliver').addEventListener('change', refreshMailto);
   refreshMailto();
 
   // ---- 阶段 1：把激活码投给电视 ----
