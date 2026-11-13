@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — LumenPlay</title>
+<link rel="alternate" hreflang="zh-CN" href="privacy.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#e8b93c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0d1117; color:#e6edf3;
+         background:var(--bg); color:var(--text);
+         font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.8; }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:30px; margin-bottom:6px; }
+  .meta { color:#8b949e; color:var(--muted); font-size:14px; margin-bottom:32px; }
+  h2 { font-size:19px; margin:28px 0 10px; color:#e8b93c; color:var(--accent); }
+  p, li { font-size:15px; color:#e6edf3; color:var(--text); }
+  ul { padding-left:22px; margin:8px 0; }
+  .card { background:#161b22; border:1px solid #30363d;
+          background:var(--panel); border-color:var(--border); border-radius:10px;
+          padding:20px 24px; margin:20px 0; }
+  a { color:#e8b93c; color:var(--accent); }
+  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
+  footer { margin-top:48px; text-align:center; font-size:13px; color:#8b949e; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang"><a href="privacy.html">简体中文</a></div>
+  <h1>Privacy Policy</h1>
+  <p class="meta">LumenPlay · Effective: 2026-11-13 · Version 1.2</p>
+
+  <div class="card">
+    <p><strong>In one sentence: we do not collect, upload or analyse any user data.</strong>
+    No accounts, no telemetry, no crash reporting, no advertising SDKs.</p>
+  </div>
+
+  <h2>1. What information we handle</h2>
+  <p>The App <strong>never sends your personal information to any server</strong>. The following is stored
+  only on your device and used solely for the App's own features:</p>
+  <ul>
+    <li><strong>Playback history / recently played</strong>: kept in the App's private directory,
+        used for the "recently played" list;</li>
+    <li><strong>Media server credentials</strong> (Jellyfin / WebDAV / SMB addresses, usernames, passwords):
+        passwords are encrypted with AES-GCM via the Android KeyStore and stored locally.
+        They <strong>never leave the device</strong> and are excluded from system cloud backups;</li>
+    <li><strong>Playback preferences</strong> (aspect-ratio memory, subtitle preferences, etc.): stored locally;</li>
+    <li><strong>Device identifier (ANDROID_ID)</strong>: used only on-device to derive the
+        "machine code" for activation-code licensing on our website channel.
+        <strong>It is never uploaded and never communicated to any server</strong>, and cannot be used by us
+        or any third party to identify you.</li>
+  </ul>
+
+  <h2>2. Where network traffic goes</h2>
+  <p>Network traffic from the App <strong>only occurs between your device and the media sources you add
+  yourself</strong> (your NAS, your Windows share, your Jellyfin server, or a video URL you enter).
+  We run no relay servers, so no third party can see what you are watching.</p>
+
+  <h2>3. Permissions and why they are needed</h2>
+  <ul>
+    <li><strong>INTERNET / ACCESS_NETWORK_STATE</strong>: play network video; detect connectivity
+        (Wi-Fi, disconnection) for adaptive bitrate and offline notices;</li>
+    <li><strong>CHANGE_WIFI_MULTICAST_STATE</strong>: used only to discover media servers on the local
+        network (NAS, SMB shares, Jellyfin/Emby, DLNA). Android drops Wi-Fi multicast packets by default to
+        save power, so the App must briefly hold a multicast lock to receive discovery broadcasts —
+        <strong>the lock is held only for the seconds a scan runs and released immediately afterwards</strong>.
+        It enables no continuous listening and involves no location data (the App requests no location
+        permission);</li>
+    <li><strong>READ_MEDIA_VIDEO</strong>: list local videos on your device;</li>
+    <li><strong>READ_EXTERNAL_STORAGE</strong>: same purpose, requested only on Android 12 and earlier
+        (newer versions use the granular media permission above);</li>
+    <li><strong>WAKE_LOCK</strong>: keep screen/network latency low during playback;</li>
+    <li><strong>MODIFY_AUDIO_SETTINGS</strong>: switch audio routing for Dolby passthrough.</li>
+  </ul>
+
+  <h2>4. Open-source components</h2>
+  <p>The App uses FFmpeg (LGPL-2.1+, dynamically linked), OpenSSL, libxml2, OkHttp, Coil, SMBJ, AndroidX,
+  Material Components and SLF4J. The licence list is on the
+  <a href="licenses-en.html">Open-source licences</a> page. These components run locally and perform no
+  independent data collection.</p>
+
+  <h2>5. Purchases through Google Play</h2>
+  <p>When you buy the Pro features through the Google Play channel, payment is handled entirely by Google;
+  we <strong>never see your card number or billing address</strong>. Google only tells us whether a given
+  user has purchased, without identity details.</p>
+
+  <h2>6. Changes to this policy</h2>
+  <p>If any data collection is ever introduced (there is no such plan today), it will be announced prominently
+  on this page in advance and reflected in the App's own notices.</p>
+
+  <h2>7. Contact</h2>
+  <p>For any privacy or data-protection question, contact
+  <a href="mailto:support@lumenplay.app">support@lumenplay.app</a> (usually answered within 24 hours).</p>
+
+  <footer>
+    <a href="index-en.html">← Back to LumenPlay</a> ·
+    <a href="terms-en.html">Terms of Service</a> ·
+    <a href="licenses-en.html">Open-source licences</a>
+  </footer>
+</div>
+</body>
+</html>

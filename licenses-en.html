@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open-source licences — LumenPlay</title>
+<link rel="alternate" hreflang="zh-CN" href="licenses.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#e8b93c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0d1117; color:#e6edf3;
+         background:var(--bg); color:var(--text);
+         font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; line-height:1.7; }
+  .wrap { max-width:880px; margin:0 auto; padding:40px 24px 0; }
+  a { color:#e8b93c; color:var(--accent); }
+  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
+  header { margin-bottom:28px; }
+  h1 { font-size:28px; margin-bottom:8px; }
+  header p { color:#8b949e; color:var(--muted); font-size:14px; }
+  section { border-top:1px solid #30363d; padding:28px 0; border-top:1px solid var(--border); }
+  h2 { font-size:20px; margin-bottom:12px; color:#e8b93c; color:var(--accent); }
+  h3 { font-size:15px; margin:18px 0 8px; }
+  p, li { color:#8b949e; color:var(--muted); font-size:14px; }
+  ul { padding-left:22px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; margin:12px 0; }
+  th, td { border-bottom:1px solid #30363d; padding:8px 10px;
+           border-bottom:1px solid var(--border); text-align:left; vertical-align:top; }
+  th { color:#8b949e; color:var(--muted); font-weight:500; }
+  code { font-size:12px; word-break:break-all; }
+  pre { background:#161b22; border:1px solid #30363d; background:var(--panel);
+        border-color:var(--border); border-radius:8px; color:#8b949e; color:var(--muted);
+        padding:14px; font-size:12px; overflow-x:auto; white-space:pre-wrap; word-break:break-all; }
+  footer { color:#8b949e; padding:32px 0 48px; text-align:center;
+           color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="lang"><a href="licenses.html">简体中文</a></div>
+  <h1>Open-source licences</h1>
+  <p>LumenPlay is distributed as closed-source software. Below are the open-source components it uses and how
+     their licence obligations are met.</p>
+</header>
+
+<section>
+  <h2>FFmpeg — LGPL-2.1 or later</h2>
+  <p>The app uses FFmpeg (version <strong>7.1.5</strong>, unmodified upstream sources) for media demuxing,
+     <strong>dynamically linked</strong> as separate shared libraries (libavformat.so / libavcodec.so /
+     libavutil.so / libswresample.so). It is not statically linked and no GPL or non-free components are enabled.</p>
+  <ul>
+    <li>Source: <a href="https://ffmpeg.org/download.html">ffmpeg.org/download.html</a> (unmodified upstream)</li>
+    <li>Full licence: <a href="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html">LGPL-2.1</a></li>
+    <li>Relinking: the .so files above are standard ELF shared objects; you may replace them with your own
+        builds of the same name to relink.</li>
+  </ul>
+  <h3>Build configuration (configure summary)</h3>
+  <pre>--enable-cross-compile --enable-pic
+--enable-static --disable-shared --disable-symver
+--disable-programs --disable-doc --disable-avdevice
+--disable-swscale --disable-swresample --disable-avfilter --disable-postproc
+--disable-encoders --disable-decoders --disable-muxers
+--disable-filters --disable-devices
+--enable-network --enable-openssl --enable-libxml2
+--enable-demuxer=&lt;allowlist&gt; --enable-protocol=&lt;allowlist&gt;
+--enable-parser=&lt;allowlist&gt; --enable-bsf=&lt;allowlist&gt;
+--enable-decoder=&lt;subtitle/audio decoder allowlist&gt; --enable-small</pre>
+  <p>The complete build script <code>build_ffmpeg.sh</code> is available on request by email.</p>
+</section>
+
+<section>
+  <h2>Subtitle rendering and shaping (libass toolchain)</h2>
+  <p>The app uses the following components for ASS / SSA styled subtitle rendering and shaping
+     (text shaping, bidirectional text, line breaking), compiled statically into the main library.</p>
+  <table>
+    <tr><th>Component</th><th>Version</th><th>Licence</th><th>Purpose</th></tr>
+    <tr><td><a href="https://github.com/libass/libass">libass</a></td><td>0.17.4</td><td>ISC</td><td>ASS / SSA subtitle rendering</td></tr>
+    <tr><td><a href="https://freetype.org">FreeType</a></td><td>2.13.3</td><td>FreeType License (BSD-style) / GPLv2 dual; distributed here under the FTL</td><td>Font rasterisation</td></tr>
+    <tr><td><a href="https://github.com/fribidi/fribidi">GNU FriBidi</a></td><td>1.0.16</td><td>LGPL-2.1 or later</td><td>Bidirectional text algorithm</td></tr>
+    <tr><td><a href="https://github.com/harfbuzz/harfbuzz">HarfBuzz</a></td><td>8.5.0</td><td>MIT</td><td>Complex text shaping</td></tr>
+    <tr><td><a href="https://github.com/adah1972/libunibreak">libunibreak</a></td><td>5.1</td><td>zlib / libpng licence</td><td>Line-breaking algorithm</td></tr>
+  </table>
+  <p>All components use unmodified upstream sources; the full libass licence texts are in the
+     <code>COPYING</code> file of its repository. FriBidi is statically linked under LGPL-2.1+: to relink the
+     application, request the corresponding object files and build configuration by email.</p>
+</section>
+
+<section>
+  <h2>Apache License 2.0</h2>
+  <table>
+    <tr><th>Component</th><th>Version</th><th>Purpose</th></tr>
+    <tr><td><a href="https://www.openssl.org">OpenSSL</a></td><td>3.5.5</td><td>TLS (linked by FFmpeg)</td></tr>
+    <tr><td><a href="https://square.github.io/okhttp/">OkHttp</a></td><td>4.12.0</td><td>HTTP client</td></tr>
+    <tr><td><a href="https://coil-kt.github.io/coil/">Coil</a></td><td>3.3.0</td><td>Image loading</td></tr>
+    <tr><td><a href="https://github.com/hierynomus/smbj">SMBJ</a></td><td>0.15.0</td><td>SMB2/3 client</td></tr>
+    <tr><td>AndroidX components</td><td>—</td><td>UI foundation</td></tr>
+    <tr><td><a href="https://github.com/material-components/material-components-android">Material Components</a></td><td>1.13.0</td><td>UI components</td></tr>
+    <tr><td><a href="https://github.com/Kotlin/kotlinx.coroutines">kotlinx-coroutines</a></td><td>1.10.2</td><td>Concurrency</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>MIT License</h2>
+  <table>
+    <tr><th>Component</th><th>Version</th><th>Purpose</th></tr>
+    <tr><td><a href="https://gitlab.gnome.org/GNOME/libxml2">libxml2</a></td><td>—</td><td>DASH MPD parsing (linked by FFmpeg)</td></tr>
+    <tr><td><a href="https://www.slf4j.org">SLF4J (nop)</a></td><td>2.0.18</td><td>Logging facade (no-op)</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>App signing fingerprints</h2>
+  <p>To confirm you installed an official build, check the certificate fingerprint of the APK
+     (identical fingerprint = the package has not been tampered with or repackaged).
+     The app is distributed through different channels with different signing keys:</p>
+  <table>
+    <tr><th>Channel</th><th>Signing key</th><th>SHA-256</th><th>SHA-1</th></tr>
+    <tr>
+      <td>Google Play</td>
+      <td>Google-managed app signing key</td>
+      <td><code>45:0C:43:9C:D5:41:BF:D2:3F:44:0A:FB:D1:51:06:18:57:D4:A9:1D:23:4A:79:5C:7A:6D:97:23:53:65:8E:54</code></td>
+      <td><code>64:83:57:A9:94:92:52:E6:A0:D5:F6:42:E8:1E:BF:CE:20:FB:7C:06</code></td>
+    </tr>
+    <tr>
+      <td>Direct APK from our website</td>
+      <td>LumenPlay release key</td>
+      <td><code>22:8C:18:88:8B:20:61:C3:02:32:10:B4:6A:14:52:9F:73:F5:00:E4:93:0A:F5:13:C1:FD:15:B8:E8:CF:D3:87</code></td>
+      <td><code>60:EC:32:C6:E1:92:3B:8B:37:55:C9:85:A9:8D:BE:5A:67:37:AF:D3</code></td>
+    </tr>
+  </table>
+  <p>To check (developer view): <code>keytool -printcert -jarfile LumenPlay.apk</code>.
+     A SHA-256 value matching either row above means the package is an official build.
+     If neither matches, the package was not published by us — do not install it.</p>
+</section>
+
+<section>
+  <h2>Notes</h2>
+  <p>Full licence texts are available from each project's website. The list above corresponds to the actual
+     contents of the released APK and is revised whenever dependency versions change.
+     Last updated: 2026-11-13.</p>
+</section>
+
+<footer>
+  <a href="index-en.html">Back to home</a> ·
+  <a href="privacy-en.html">Privacy Policy</a> ·
+  <a href="terms-en.html">Terms of Service</a>
+  <p>© 2026 LumenPlay</p>
+</footer>
+</div>
+</body>
+</html>

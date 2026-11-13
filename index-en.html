@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LumenPlay — 4K disc player for Android</title>
+<meta name="description" content="LumenPlay is an Android player built for 4K disc files, large files and self-hosted media libraries. C/C++ core, hardware decoding, HDR10 / Dolby Vision where supported by your device. One-time purchase. No ads, no subscription, no data collection.">
+<link rel="alternate" hreflang="zh-CN" href="index.html">
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --text: #e6edf3; --muted: #8b949e; --accent: #e8b93c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3;
+    background: var(--bg); color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.7; }
+  a { color: #e8b93c; color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .lang { text-align: right; padding-top: 16px; font-size: 14px; }
+  header { padding: 40px 0 48px; text-align: center; }
+  header h1 { font-size: 42px; letter-spacing: 1px; }
+  header h1 .cn { color: #e8b93c; color: var(--accent); font-size: 26px; margin-left: 10px; }
+  header p.tagline { color: #8b949e; color: var(--muted); font-size: 18px; margin-top: 12px; }
+  header p.badges { color: #8b949e; margin-top: 18px; color: var(--muted); font-size: 14px; }
+  .btn { display: inline-block; margin: 26px 8px 0; padding: 12px 34px;
+    border: 1px solid #e8b93c; border: 1px solid var(--accent); border-radius: 8px; font-size: 16px; }
+  .btn.primary { background: #e8b93c; background: var(--accent); color: #111; font-weight: 600; }
+  .btn:hover { opacity: .85; text-decoration: none; }
+  section { border-top: 1px solid #30363d; padding: 36px 0; border-top: 1px solid var(--border); }
+  section h2 { font-size: 24px; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .card { background: #161b22; border: 1px solid #30363d;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+  .card h3 { color: #e8b93c; font-size: 16px; margin-bottom: 8px; color: var(--accent); }
+  .card p { color: #8b949e; color: var(--muted); font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { border-bottom: 1px solid #30363d; padding: 10px 12px;
+    border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+  th { color: #8b949e; color: var(--muted); font-weight: 500; }
+  .price { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    background: #161b22; border: 1px solid #30363d;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 20px; }
+  .price b { color: #e8b93c; font-size: 32px; color: var(--accent); letter-spacing: .5px; }
+  .price span { color: #8b949e; color: var(--muted); font-size: 14px; }
+  td .tip { color: #8b949e; color: var(--muted); font-size: 13px; }
+  footer { color: #8b949e; padding: 40px 0 60px; text-align: center; color: var(--muted);
+    border-top: 1px solid #30363d; font-size: 13px; border-top: 1px solid var(--border); }
+  footer a { margin: 0 10px; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="lang"><a href="index.html">简体中文</a></div>
+  <h1>LumenPlay</h1>
+  <p class="tagline">An Android player built for 4K disc files, large files and self-hosted libraries</p>
+  <p class="badges">Jellyfin / Emby / WebDAV / SMB all free · Dolby &amp; DTS bitstream passthrough (where device and receiver support it) · ISO / BDMV disc playback · ASS/SSA styled subtitles · automatic frame-rate matching · HDR10, Dolby Vision where supported · one-time purchase, no ads, no subscription</p>
+  <a class="btn primary" href="#download">Download</a>
+  <a class="btn" href="#features">Features</a>
+</header>
+
+<section class="wrap" id="features">
+  <h2>Features</h2>
+  <div class="grid">
+    <div class="card"><h3>A playback core built for 4K</h3><p>No reliance on the system player, so frame scheduling is far more precise: seeking lands exactly where you point, and long 4K films stay smooth when bandwidth and hardware allow.</p></div>
+    <div class="card"><h3>HDR / Dolby Vision</h3><p>HDR10 / HLG metadata is passed through. Dolby Vision and Atmos require device support: supported devices use the dedicated path automatically, unsupported devices play the HDR10 base layer — no washed-out or tinted picture.</p></div>
+    <div class="card"><h3>Bitstream passthrough</h3><p>Where both the device and the AV receiver support it, LumenPlay sends the original Dolby / DTS bitstream to the receiver for decoding, with no decode-and-re-encode step. If either end lacks support, the track is decoded to PCM and the film plays as usual.</p></div>
+    <div class="card"><h3>ISO / BDMV disc playback</h3><p>Open a Blu-ray ISO image or BDMV folder structure directly (local storage or an SMB share). The main feature is located and played automatically — no unpacking, no third-party tools.</p></div>
+    <div class="card"><h3>ASS / SSA styled subtitles</h3><p>Embedded ASS / SSA subtitles render as authored: positioning, fonts, colours, outlines and shadows, fades, karaoke timing and CJK line breaking are all preserved, crisp on a 4K picture. SRT / PGS / TTML and other formats are available in every edition.</p></div>
+    <div class="card"><h3>Automatic frame-rate matching (free)</h3><p>At playback start the display refresh rate is switched to match the source (a 23.976 fps film plays at 23.976 Hz), so camera pans stop juddering. If the device has no matching mode, nothing changes. Free and on by default.</p></div>
+    <div class="card"><h3>Self-hosted libraries</h3><p>Jellyfin and Emby both supported natively; WebDAV and SMB (Windows shares / NAS) work out of the box. Credentials are encrypted on the device.</p></div>
+    <div class="card"><h3>Steadier network playback</h3><p>Adaptive bitrate (ABR): when playing HLS / DASH streams (.m3u8 / .mpd) quality is switched to match bandwidth, reducing stalls and buffering.</p></div>
+    <div class="card"><h3>Large files, high bitrates</h3><p>MKV / MP4 files beyond 4 GB and high-bitrate titles play reliably. Transient network drops are retried automatically and playback resumes; if you stop for longer, reopening returns you to where you left off.</p></div>
+    <div class="card"><h3>Many subtitle formats</h3><p>SRT / ASS / SSA / PGS / TTML, with automatic external-subtitle matching, track switching and independent delay adjustment.</p></div>
+  </div>
+  <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
+    <strong style="color:var(--text)">Jellyfin / Emby, one client for both</strong>: enter the server address on
+    the same sign-in screen and your library, continue-watching, resume points, audio tracks and subtitles all
+    work. Files the client can decode play directly without server transcoding; anything it cannot decode
+    (for example some AV1 sources) is transcoded by the server and still plays.
+    <strong style="color:var(--text)">All network sources, including WebDAV and SMB, are free</strong> —
+    Emby and Jellyfin users do not need a second paid client.</p>
+</section>
+
+<section class="wrap" id="download">
+  <h2>Download</h2>
+  <table>
+    <tr><th>Channel</th><th>Notes</th></tr>
+    <tr><td>Google Play</td><td>Recommended where available: purchase and restore are tied to your Google account</td></tr>
+    <tr><td><a href="#" aria-disabled="true">Direct APK (coming soon)</a></td><td>Install the APK directly, Android 9.0 (API 28) and later</td></tr>
+  </table>
+  <p style="color:var(--muted);font-size:13px;margin-top:14px">
+    Verify the APK signing fingerprint before installing (published on the
+    <a href="licenses-en.html">licences page</a>). For the direct-install edition see "Pricing &amp; support" below.</p>
+</section>
+
+<section class="wrap" id="purchase">
+  <h2>Pricing &amp; support</h2>
+  <p style="color:var(--muted);font-size:14px;margin-bottom:18px">
+    LumenPlay is a one-time purchase with lifetime use: no ads, no subscription, no data collection.
+    Local playback and <strong>all network sources (Jellyfin / Emby / WebDAV / SMB)</strong> are free,
+    as is automatic frame-rate matching. What the purchase unlocks is audio and picture capability:
+    <strong>TrueHD / DTS-HD bitstream passthrough</strong> (where device and receiver both support it),
+    <strong>ISO / BDMV disc playback</strong> and <strong>ASS / SSA styled subtitles</strong>.
+    A <strong>7-day full-feature trial</strong> starts the first time you use any of those paid capabilities
+    (for example the first Dolby / DTS title you play, or the first disc or styled subtitle).
+    All three work during the trial — no sign-up, no account. When it ends the App returns to the free set:
+    lossless tracks are decoded to PCM and the film still plays in full.</p>
+
+  <div class="price">
+    <b>US$24.99</b>
+    <span>One-time purchase · covers <strong>2 devices</strong> · free updates for future versions</span>
+  </div>
+
+  <table>
+    <tr><th style="width:150px">Step</th><th>What to do</th></tr>
+    <tr>
+      <td>① Buy on Google Play</td>
+      <td>Open the Play Store listing on any device signed in with your Google account and purchase LumenPlay Pro.
+        Other devices with the same account unlock automatically; reinstalling restores the purchase.
+        <span class="tip">Refunds follow Google Play's policy, from "Order history → Request a refund".</span></td>
+    </tr>
+    <tr>
+      <td>② Devices without Google Play</td>
+      <td>TVs and TV boxes without Google services use the website activation-code channel. Email
+        <a href="mailto:support@lumenplay.app">support@lumenplay.app</a> for the current price and payment options;
+        you will receive an activation code bound to your device.
+        <span class="tip">Prices differ by region; ask before paying.</span></td>
+    </tr>
+    <tr>
+      <td>③ Get your machine code</td>
+      <td>In the App open <strong>Playback settings → Unlock full version</strong>. The dialog shows a
+        <strong>16-character machine code</strong>; use the copy button beside it.
+        <span class="tip">One per device — two devices means two machine codes.</span></td>
+    </tr>
+    <tr>
+      <td>④ Receive your code</td>
+      <td>Activation codes are normally issued within <strong>24 hours</strong>. Enter the code in
+        <strong>Playback settings → Unlock full version</strong> to unlock passthrough.
+        <span class="tip">Keep that email — after reinstalling, the same code restores your licence.</span></td>
+    </tr>
+    <tr>
+      <td>Reinstall / factory reset</td>
+      <td>Reinstalling on the same device: the machine code is unchanged, reuse the original code.<br>
+        Factory reset or a new device: the machine code changes; a replacement code is issued once free of
+        charge within 30 days against your original proof of purchase.</td>
+    </tr>
+    <tr>
+      <td>Third device onwards</td>
+      <td>Additional devices are purchased separately; email
+        <a href="mailto:support@lumenplay.app">support@lumenplay.app</a> with the number of devices for a quote.</td>
+    </tr>
+  </table>
+
+  <p style="color:var(--muted);font-size:13px;margin-top:20px">
+    No reply? Check your <strong>spam folder</strong> first and whitelist support@lumenplay.app; if it still has
+    not arrived, send the message again or from another mailbox. Technical support uses the same address —
+    <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>, usually answered within 24 hours.</p>
+</section>
+
+<section class="wrap" id="opensource">
+  <h2>Open-source licences</h2>
+  <p style="color:var(--muted);font-size:14px">
+    This app uses FFmpeg (LGPL-2.1+, dynamically linked, <a href="https://ffmpeg.org">ffmpeg.org</a>);
+    OpenSSL 3.x (Apache-2.0); libxml2 (MIT); OkHttp, Coil, SMBJ, AndroidX and Material Components
+    (Apache-2.0); SLF4J (MIT). Full licence texts are available from each project.
+    Version inventory and build configuration are on the
+    <a href="licenses-en.html">open-source licences page</a>.</p>
+</section>
+
+<footer class="wrap">
+  <a href="privacy-en.html">Privacy Policy</a>
+  <a href="terms-en.html">Terms of Service</a>
+  <a href="licenses-en.html">Licences</a>
+  <a href="mailto:support@lumenplay.app">Contact</a>
+  <p>© 2026 LumenPlay. This app does not collect or upload any user data.</p>
+</footer>
+
+</body>
+</html>
