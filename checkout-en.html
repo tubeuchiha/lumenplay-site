@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buy — LumenPlay</title>
+<link rel="alternate" hreflang="zh-CN" href="checkout.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#e8b93c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text);
+         font-family:-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.7; }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:30px; margin-bottom:6px; }
+  .meta { color:var(--muted); font-size:14px; margin-bottom:32px; }
+  h2 { font-size:19px; margin:28px 0 10px; color:var(--accent); }
+  p, li { font-size:15px; color:var(--text); }
+  ul { padding-left:22px; margin:8px 0; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
+          padding:20px 24px; margin:20px 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { border-bottom:1px solid var(--border); padding:10px 12px; text-align:left; }
+  th { color:var(--muted); font-weight:500; }
+  a { color:var(--accent); }
+  .price { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+           background:var(--panel); border:1px solid var(--border); border-radius:10px;
+           padding:16px 20px; margin:16px 0; }
+  .price b { color:var(--accent); font-size:32px; letter-spacing:.5px; }
+  .price span { color:var(--muted); font-size:14px; }
+  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
+  footer { margin-top:48px; text-align:center; font-size:13px; color:var(--muted); }
+  .buy-btn { display:inline-block; background:var(--accent); color:#0d1117;
+             font-size:18px; font-weight:700; padding:14px 44px; border:none;
+             border-radius:10px; cursor:pointer; letter-spacing:1px; }
+  .buy-btn:hover { filter:brightness(1.08); }
+  #msg { margin-top:16px; font-size:14px; min-height:22px; }
+  #msg.ok { color:#3fb950; }
+  #msg.err { color:#f85149; }
+  .tip { color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang"><a href="checkout.html">中文</a></div>
+  <h1>Buy LumenPlay Pro</h1>
+  <p class="meta">Website activation-code channel · one-time purchase · payments &amp; tax handled by Paddle</p>
+
+  <div class="price">
+    <b>¥105</b>
+    <span style="text-decoration:line-through;color:var(--muted)">¥178</span>
+    <span>≈ $14.99 · one-time purchase · includes <strong>3 device licences</strong> (phones and TVs combined) · free updates · tax included, no hidden fees</span>
+  </div>
+
+  <div class="card" style="text-align:center;padding:32px 24px">
+    <button class="buy-btn" id="buyBtn" onclick="openCheckout()">Buy now — ¥105</button>
+    <div id="msg"></div>
+    <p class="tip" style="margin-top:14px">Alipay / WeChat Pay (China) · PayPal / Cards / Apple Pay (worldwide)<br>
+    Checkout is encrypted and processed by Paddle. We never see your card details.</p>
+  </div>
+
+  <h2>What happens after purchase</h2>
+  <table>
+    <tr><th style="width:130px">Step</th><th>Description</th></tr>
+    <tr>
+      <td>① Checkout</td>
+      <td>Click the buy button and complete payment in the secure checkout window.</td>
+    </tr>
+    <tr>
+      <td>② Receive codes</td>
+      <td>After payment, an <strong>activation-code email is sent automatically</strong> to the email address used for payment (usually within minutes).
+        <span class="tip">Check your spam folder if it does not arrive; if nothing after 1 hour, email support@lumenplay.app.</span></td>
+    </tr>
+    <tr>
+      <td>③ Unlock in app</td>
+      <td>Each device uses one activation code: open the app's <strong>Playback settings → Unlock full version</strong> and enter a code.
+        <span class="tip">Codes are bound to each device's machine code; replacements are free with your original order number — see the refund policy and terms.</span></td>
+    </tr>
+  </table>
+
+  <h2>Before you buy</h2>
+  <ul>
+    <li><strong>Check device support first</strong>: bitstream passthrough requires both the device and AV receiver to support Dolby / DTS. A free 7-day trial (starting from first use of a paid capability) is available in the app — <strong>try before you buy</strong>.</li>
+    <li>Full price details: <a href="pricing-en.html">pricing page</a>; refunds: <a href="refund-en.html">refund policy</a>; terms: <a href="terms-en.html">terms of service</a>.</li>
+    <li>Questions: <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>.</li>
+  </ul>
+
+  <footer>
+    <a href="index-en.html">← Back to LumenPlay</a> ·
+    <a href="pricing-en.html">Pricing</a> ·
+    <a href="refund-en.html">Refund policy</a> ·
+    <a href="terms-en.html">Terms of Service</a> ·
+    <a href="privacy-en.html">Privacy Policy</a>
+  </footer>
+</div>
+
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  Paddle.Environment.set("live");
+  Paddle.Initialize({
+    token: "live_f811472d9bcdb0940c70032701b",
+    eventCallback: function (ev) {
+      if (ev.name === "checkout.completed") {
+        var m = document.getElementById("msg");
+        m.className = "ok";
+        m.textContent = "✅ Payment received! Activation codes are on their way to your email — please check your inbox and spam folder.";
+      }
+    }
+  });
+  function openCheckout() {
+    var m = document.getElementById("msg");
+    try {
+      Paddle.Checkout.open({
+        items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }]
+      });
+    } catch (e) {
+      m.className = "err";
+      m.textContent = "Checkout is temporarily unavailable. Please try again later or email support@lumenplay.app.";
+    }
+  }
+</script>
+</body>
+</html>
