@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get activation codes — LumenPlay</title>
+<link rel="alternate" hreflang="zh-CN" href="getcode.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#e8b93c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text);
+         font-family:-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.7; }
+  .wrap { max-width:680px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:28px; margin-bottom:6px; }
+  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
+  h2 { font-size:18px; margin:26px 0 10px; color:var(--accent); }
+  p, li { font-size:15px; }
+  ol { padding-left:22px; margin:8px 0; }
+  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
+          padding:20px 24px; margin:16px 0; }
+  label { display:block; font-size:14px; color:var(--muted); margin:14px 0 6px; }
+  input { width:100%; background:#0d1117; border:1px solid var(--border); border-radius:8px;
+          color:var(--text); padding:12px 14px; font-size:16px; font-family:ui-monospace,monospace; }
+  input:focus { outline:none; border-color:var(--accent); }
+  button { background:var(--accent); color:#0d1117; font-size:16px; font-weight:700;
+           padding:12px 32px; border:none; border-radius:8px; cursor:pointer; margin-top:18px; }
+  button:hover { filter:brightness(1.08); }
+  button[disabled] { opacity:.5; cursor:wait; }
+  .codebox { margin-top:16px; }
+  .codeitem { background:#0d1117; border:1px solid var(--border); border-radius:8px;
+              padding:12px 14px; margin:10px 0; word-break:break-all;
+              font-family:ui-monospace,monospace; font-size:14px; }
+  .codeitem b { color:var(--muted); font-size:12px; font-family:inherit; }
+  #msg { margin-top:14px; font-size:14px; }
+  #msg.ok { color:#3fb950; } #msg.err { color:#f85149; }
+  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
+  footer { margin-top:48px; text-align:center; font-size:13px; color:var(--muted); }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang"><a href="getcode.html">中文</a></div>
+  <h1>Get activation codes</h1>
+  <p class="meta">Enter your order ID and device machine codes — codes are generated instantly and emailed to you</p>
+
+  <div class="card">
+    <label>Order ID (starts with txn_01, see your purchase confirmation email)</label>
+    <input id="orderId" placeholder="txn_01..." autocomplete="off">
+
+    <label>Machine code ① (App: Playback settings → Unlock full version, 16 hex chars)</label>
+    <input id="m1" maxlength="16" placeholder="0123456789abcdef" autocomplete="off">
+    <label>Machine code ② (second device, optional)</label>
+    <input id="m2" maxlength="16" placeholder="(optional)" autocomplete="off">
+    <label>Machine code ③ (third device, optional)</label>
+    <input id="m3" maxlength="16" placeholder="(optional)" autocomplete="off">
+
+    <button id="goBtn" onclick="getCodes()">Get codes</button>
+    <div id="msg"></div>
+    <div class="codebox" id="codes"></div>
+  </div>
+
+  <h2>Notes</h2>
+  <ol>
+    <li>Each device uses one activation code bound to its machine code. Enter it in the app's Playback settings → Unlock full version.</li>
+    <li>Up to <strong>3 devices per order</strong>. Requesting a code for an already-issued machine re-sends the same code without using your replacement quota.</li>
+    <li><strong>Device replacement is free</strong> (same order ID, cumulative cap 5 codes): enter the original order ID plus the new machine code on this page.</li>
+    <li>Codes are also emailed to your purchase address — keep that email. <a href="refund-en.html">Refund policy</a> · <a href="terms-en.html">Terms</a>.</li>
+  </ol>
+
+  <footer>
+    <a href="index-en.html">← Back to LumenPlay</a> ·
+    <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>
+  </footer>
+</div>
+
+<script>
+// Fill with the deployed Worker URL after deployment
+const WORKER_URL = "https://REPLACE-WITH-WORKER-URL.workers.dev/issue";
+
+async function getCodes() {
+  const msg = document.getElementById("msg");
+  const box = document.getElementById("codes");
+  const btn = document.getElementById("goBtn");
+  const orderId = document.getElementById("orderId").value.trim();
+  const machines = ["m1", "m2", "m3"]
+    .map((id) => document.getElementById(id).value.trim().toLowerCase())
+    .filter(Boolean);
+
+  msg.className = ""; msg.textContent = ""; box.innerHTML = "";
+  if (!/^txn_01[a-z0-9]+$/i.test(orderId)) {
+    msg.className = "err"; msg.textContent = "Invalid order ID: it should start with txn_01 (see your purchase confirmation email)."; return;
+  }
+  if (machines.length === 0) {
+    msg.className = "err"; msg.textContent = "Enter at least one machine code (copy it from the app's unlock dialog)."; return;
+  }
+  for (const mch of machines) {
+    if (!/^[0-9a-f]{16}$/.test(mch)) {
+      msg.className = "err"; msg.textContent = "Machine codes must be 16 hex characters (0-9 a-f): `" + mch + "`"; return;
+    }
+  }
+
+  btn.disabled = true;
+  try {
+    const r = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ order_id: orderId, machines }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      msg.className = "err"; msg.textContent = data.error || "Request failed. Please try again later or email support@lumenplay.app.";
+      return;
+    }
+    msg.className = "ok";
+    msg.textContent = "✅ Codes generated" + (data.emailed_to ? " and emailed to " + data.emailed_to : "") + ".";
+    for (const c of data.codes) {
+      const div = document.createElement("div");
+      div.className = "codeitem";
+      div.innerHTML = "<b>Machine " + c.machine + "</b><br>" + c.code;
+      box.appendChild(div);
+    }
+  } catch (e) {
+    msg.className = "err"; msg.textContent = "Network error, please try again later or email support@lumenplay.app.";
+  } finally {
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
