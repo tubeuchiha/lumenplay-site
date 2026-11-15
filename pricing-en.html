@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — LumenPlay</title>
+<link rel="alternate" hreflang="zh-CN" href="pricing.html">
+<style>
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
+          --muted:#8b949e; --accent:#e8b93c; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0d1117; color:#e6edf3;
+         background:var(--bg); color:var(--text);
+         font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; line-height:1.8; }
+  .wrap { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:30px; margin-bottom:6px; }
+  .meta { color:#8b949e; color:var(--muted); font-size:14px; margin-bottom:32px; }
+  h2 { font-size:19px; margin:28px 0 10px; color:#e8b93c; color:var(--accent); }
+  p, li { font-size:15px; color:#e6edf3; color:var(--text); }
+  ul { padding-left:22px; margin:8px 0; }
+  .card { background:#161b22; border:1px solid #30363d;
+          background:var(--panel); border-color:var(--border); border-radius:10px;
+          padding:20px 24px; margin:20px 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { border-bottom:1px solid #30363d; border-bottom:1px solid var(--border);
+           padding:10px 12px; text-align:left; }
+  th { color:#8b949e; color:var(--muted); font-weight:500; }
+  a { color:#e8b93c; color:var(--accent); }
+  .price { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+           background:#161b22; border:1px solid #30363d;
+           background:var(--panel); border-color:var(--border); border-radius:10px;
+           padding:16px 20px; margin:16px 0; }
+  .price b { color:#e8b93c; color:var(--accent); font-size:32px; letter-spacing:.5px; }
+  .price span { color:#8b949e; color:var(--muted); font-size:14px; }
+  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
+  footer { margin-top:48px; text-align:center; font-size:13px; color:#8b949e; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang"><a href="pricing.html">简体中文</a></div>
+  <h1>Pricing</h1>
+  <p class="meta">LumenPlay · Updated: 2026-11-16</p>
+
+  <div class="card">
+    <p><strong>In one sentence: a one-time purchase, yours forever — no subscription, no ads,
+    no further in-app charges. Local playback and all network sources are free;
+    the purchase unlocks the audio &amp; video capabilities.</strong></p>
+  </div>
+
+  <h2>1. Price</h2>
+  <div class="price">
+    <b>¥105</b>
+    <span>Website activation-code channel · one-time purchase · includes <strong>2 device licences</strong> · free updates</span>
+  </div>
+  <div class="price">
+    <b>$24.99</b>
+    <span>Google Play channel (list price; $14.99 during promotions) · one-time purchase · tied to your Google account, works on all your devices</span>
+  </div>
+  <p>Both channels unlock exactly the same capabilities — choose by device type: devices with Google
+  Play should buy in the Play Store (reinstall restores automatically, and the same Google account
+  unlocks on every device). TVs, TV boxes and devices without Google services use the website
+  activation-code channel. Prices are aligned across channels (¥105 ≈ $14.99) to prevent arbitrage.</p>
+
+  <h2>2. Free vs paid capabilities</h2>
+  <table>
+    <tr><th style="width:50%">Free forever</th><th>Unlocked by one-time purchase</th></tr>
+    <tr>
+      <td>Local file playback (4K / large files / high bitrate)<br>
+          All network sources: Jellyfin / Emby / WebDAV / SMB<br>
+          Automatic frame-rate matching · SRT / PGS / TTML subtitles<br>
+          Adaptive streaming (HLS / DASH) · resume playback</td>
+      <td>Bitstream passthrough of TrueHD / DTS-HD audio (when device and AV receiver support it)<br>
+          Blu-ray ISO / BDMV disc playback<br>
+          ASS / SSA styled-subtitle rendering</td>
+    </tr>
+  </table>
+
+  <h2>3. 7-day full-feature trial</h2>
+  <p>Starting the first time you use any paid capability, everything is unlocked for 7 days —
+  no sign-up, no account, no payment details required. When the trial ends, the App returns to the
+  free feature set and videos still play in full. <strong>Please confirm device support during the
+  trial before purchasing.</strong></p>
+
+  <h2>4. Hardware prerequisites for paid capabilities</h2>
+  <ul>
+    <li><strong>Bitstream passthrough</strong>: requires the device and AV receiver to support the
+        same codec (TrueHD / DTS-HD, etc.). Otherwise audio is decoded to PCM and playback is unaffected.</li>
+    <li><strong>Dolby Vision</strong>: requires a compatible display and decode path. Sources with an
+        HDR10 compatibility layer (Profile 8) fall back to the base layer; Profile 5 has no fallback
+        layer and the App clearly warns when the device does not support it.</li>
+    <li>All capabilities <strong>depend on device hardware</strong>; missing support is not a defect.
+        See section 4 of the <a href="refund-en.html">Refund Policy</a>.</li>
+  </ul>
+
+  <h2>5. Taxes and payment</h2>
+  <ul>
+    <li><strong>Google Play channel</strong>: handled by Google; applicable taxes are collected by
+        Google under local rules.</li>
+    <li><strong>Website (via Paddle)</strong>: Paddle acts as merchant of record and calculates,
+        collects and remits applicable taxes based on the buyer's location. Available currencies and
+        payment methods (Alipay / WeChat Pay / cards, etc.) are shown at checkout.</li>
+    <li><strong>Website (Alipay / WeChat transfer)</strong>: personal transfer, all fees included in
+        the listed price.</li>
+  </ul>
+
+  <h2>6. Price changes</h2>
+  <p>We may adjust prices or run promotions; <strong>completed purchases are never affected by later
+  price changes</strong> (the licence is perpetual and includes free updates). Promotional prices are
+  not applied retroactively and are not grounds for a refund.</p>
+
+  <p style="margin-top:24px">Purchase and activation steps are described in
+  <a href="index-en.html#purchase">"Pricing &amp; Support"</a>; refund rules are in the
+  <a href="refund-en.html">Refund Policy</a>.</p>
+
+  <footer>
+    <a href="index-en.html">← Back to LumenPlay</a> ·
+    <a href="terms-en.html">Terms of Service</a> ·
+    <a href="privacy-en.html">Privacy Policy</a> ·
+    <a href="refund-en.html">Refund Policy</a>
+  </footer>
+</div>
+</body>
+</html>
