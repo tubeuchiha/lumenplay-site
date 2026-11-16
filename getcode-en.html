@@ -43,7 +43,7 @@
 <div class="wrap">
   <div class="lang"><a href="getcode.html">中文</a></div>
   <h1>Get activation codes</h1>
-  <p class="meta">Enter your order ID and device machine codes — codes are generated instantly and emailed to you</p>
+  <p class="meta">Enter your order ID and device machine codes — codes are generated instantly and emailed to you. Only the activation code needs to be pasted into the app; machine codes are just labels for telling devices apart.</p>
 
   <div class="card">
     <label>Order ID (starts with txn_01, see your purchase confirmation email)</label>
@@ -118,7 +118,7 @@ async function getCodes() {
     for (const c of data.codes) {
       const div = document.createElement("div");
       div.className = "codeitem";
-      div.innerHTML = "<b>Machine " + c.machine + "</b><br>" + c.code;
+      div.innerHTML = "Machine: " + c.machine + "<br>Activation code: " + c.code;
       box.appendChild(div);
     }
   } catch (e) {

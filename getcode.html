@@ -44,7 +44,7 @@
 <div class="wrap">
   <div class="lang"><a href="getcode-en.html">English</a></div>
   <h1>获取激活码</h1>
-  <p class="meta">输入订单号与设备机器码，激活码立即生成并发到你的购买邮箱</p>
+  <p class="meta">输入订单号与设备机器码，激活码立即生成并发到你的购买邮箱。激活时只需复制激活码粘贴进 App；机器码仅用于区分设备。</p>
 
   <div class="card">
     <label>订单号（购买确认邮件里的 txn_01 开头字符串）</label>
@@ -121,7 +121,7 @@ async function getCodes() {
     for (const c of data.codes) {
       const div = document.createElement("div");
       div.className = "codeitem";
-      div.innerHTML = "<b>机器码 " + c.machine + "</b><br>" + c.code;
+      div.innerHTML = "机器码：" + c.machine + "<br>激活码：" + c.code;
       box.appendChild(div);
     }
   } catch (e) {
