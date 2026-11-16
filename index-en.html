@@ -36,6 +36,12 @@
     background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 26px 26px; }
   .card h3 { color: #e8b93c; font-size: 18px; margin-bottom: 14px; letter-spacing: .3px; color: var(--accent); }
   .card p { color: #8b949e; color: var(--muted); font-size: 15px; line-height: 1.9; }
+  .card.wide { grid-column: span 2; }
+  .card ul { margin: 0; padding-left: 20px; }
+  .card li { color: var(--muted); font-size: 15px; line-height: 1.9; margin-bottom: 10px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card li strong { color: var(--text); font-weight: 500; }
+  @media (max-width: 760px) { .card.wide { grid-column: auto; } }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { border-bottom: 1px solid #30363d; padding: 10px 12px;
     border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
@@ -71,18 +77,17 @@
     <div class="card"><h3>Audio bitstream passthrough</h3><p>Where both the device and the AV receiver support it, the original Dolby / DTS bitstream is sent to the receiver undecoded, preserving studio dynamic range and channel layout. If any link lacks support, output falls back to PCM decoding without interrupting playback.</p></div>
     <div class="card"><h3>ISO / BDMV disc playback</h3><p>Reads Blu-ray ISO images and BDMV folder structures directly (local storage or SMB share), parses PLAYLIST entries to locate the main feature — no unpacking, no third-party tools.</p></div>
     <div class="card"><h3>Professional subtitle rendering</h3><p>A libass-based pipeline renders ASS / SSA subtitles exactly as authored: absolute positioning, font styling, outlines and shadows, fades, karaoke timing and CJK line breaking, crisp at 4K. SRT / PGS / TTML and other formats are also supported, with automatic external-subtitle matching, track switching and independent delay adjustment.</p></div>
-    <div class="card"><h3>Automatic frame-rate matching</h3><p>At playback start the display refresh rate is switched to match the source (23.976 fps → 23.976 Hz), removing rhythmic motion judder. If the device has no matching mode, playback continues unchanged. Free and on by default.</p></div>
-    <div class="card"><h3>Self-hosted libraries</h3><p>Native Jellyfin and Emby clients; WebDAV and SMB (Windows shares / NAS) work out of the box. Credentials are encrypted and stored on the device only.</p></div>
+    <div class="card"><h3>Automatic frame-rate matching</h3><p>At playback start the display refresh rate is switched to match the source (23.976 fps → 23.976 Hz), removing rhythmic motion judder. If the device has no matching mode, playback continues unchanged.</p></div>
+    <div class="card wide"><h3>Self-hosted libraries</h3>
+      <ul>
+        <li><strong>Native Jellyfin &amp; Emby clients</strong> — library browsing, continue watching, resume sync and audio / subtitle track switching; both servers share one sign-in screen.</li>
+        <li><strong>Direct Play</strong> — files the client can decode play directly without server transcoding; anything it cannot (e.g. some AV1 sources) falls back to server transcoding, no black screens.</li>
+        <li><strong>WebDAV / SMB out of the box</strong> — Windows shares and NAS connect directly; credentials are encrypted and stored on the device only.</li>
+        <li><strong>All network sources free</strong> — Emby / Jellyfin users never pay for a second playback client.</li>
+      </ul></div>
     <div class="card"><h3>Steadier network playback</h3><p>Adaptive bitrate (ABR): when playing HLS / DASH streams (.m3u8 / .mpd), quality is switched dynamically to match available bandwidth, with multi-level buffering to reduce stalls and rebuffering.</p></div>
     <div class="card"><h3>Large files, high bitrates</h3><p>MKV / MP4 files beyond 4 GB and high-bitrate titles play reliably. Transient network drops are retried automatically with seamless resume; after longer interruptions, reopening returns to the last playback position.</p></div>
   </div>
-  <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
-    <strong style="color:var(--text)">Jellyfin / Emby, one client for both</strong>: enter the server address on
-    the same sign-in screen and your library, continue-watching, resume points, audio tracks and subtitles all
-    work. Files the client can decode play directly without server transcoding; anything it cannot decode
-    (for example some AV1 sources) is transcoded by the server and still plays.
-    <strong style="color:var(--text)">All network sources, including WebDAV and SMB, are free</strong> —
-    Emby and Jellyfin users do not need a second paid client.</p>
 </section>
 
 <section class="wrap" id="download">

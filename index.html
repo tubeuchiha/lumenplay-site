@@ -47,6 +47,12 @@
   font-size: 18px; margin-bottom: 14px; color: var(--accent); letter-spacing: .3px;}
   .card p {  color: #8b949e;
   color: var(--muted); font-size: 15px; line-height: 1.9;}
+  .card.wide { grid-column: span 2; }
+  .card ul { margin: 0; padding-left: 20px; }
+  .card li { color: var(--muted); font-size: 15px; line-height: 1.9; margin-bottom: 10px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card li strong { color: var(--text); font-weight: 500; }
+  @media (max-width: 760px) { .card.wide { grid-column: auto; } }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td {  border-bottom: 1px solid #30363d;
   padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left;}
@@ -102,17 +108,17 @@
     <div class="card"><h3>音频原码直通</h3><p>在设备与功放同时支持的条件下，将杜比系 / DTS 系音频的原始码流不经解码直接输出至功放，保留录音室级动态范围与声道布局；任一环节不支持该编码时，自动回退为 PCM 解码输出，播放不中断。</p></div>
     <div class="card"><h3>原盘 ISO / BDMV 播放</h3><p>直接读取蓝光原盘 ISO 镜像与 BDMV 目录结构（本地存储或 SMB 共享），解析 PLAYLIST 自动定位正片，无需解包、无需第三方工具。</p></div>
     <div class="card"><h3>专业字幕渲染引擎</h3><p>内置 libass 渲染管线，ASS / SSA 特效字幕按作者意图逐项还原：绝对定位、字体样式、描边阴影、淡入淡出、卡拉OK 逐字上色与 CJK 智能换行，4K 分辨率下清晰锐利。另支持 SRT / PGS / TTML 等格式：外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
-    <div class="card"><h3>自动帧率匹配</h3><p>起播时将显示设备刷新率切换至与片源帧率一致（如 23.976 fps → 23.976 Hz），消除运动画面的规律性抖动（judder）；设备无对应档位时保持原状，不影响播放。免费提供，默认开启。</p></div>
-    <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议原生直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连；凭据经加密后仅存本机，不上传服务器。</p></div>
+    <div class="card"><h3>自动帧率匹配</h3><p>起播时将显示设备刷新率切换至与片源帧率一致（如 23.976 fps → 23.976 Hz），消除运动画面的规律性抖动（judder）；设备无对应档位时保持原状，不影响播放。</p></div>
+    <div class="card wide"><h3>自建媒体库直连</h3>
+      <ul>
+        <li><strong>Jellyfin / Emby 双协议原生直连</strong>——媒体库浏览、继续观看、断点同步、多音轨与字幕切换，两款服务器共用同一登录入口。</li>
+        <li><strong>智能直连（Direct Play）</strong>——客户端能解码的文件直接播放，不经服务器转码；解不了的编码（如部分 AV1 片源）由服务器转码兜底，不会黑屏。</li>
+        <li><strong>WebDAV / SMB 开箱即连</strong>——Windows 共享与 NAS 直接添加，凭据加密后仅存本机，不上传服务器。</li>
+        <li><strong>全部网络源免费使用</strong>——Emby / Jellyfin 用户不必再为第二个播放客户端付费。</li>
+      </ul></div>
     <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按实时带宽动态切换清晰度，配合多级缓冲策略降低卡顿与重缓冲次数。</p></div>
     <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断自动重试、断点续播，长时间中断后重新打开即恢复至上次进度。</p></div>
   </div>
-  <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
-    <strong style="color:var(--text)">Jellyfin / Emby 双协议直连</strong>：两款主流家庭媒体服务器共用同一登录入口，
-    填入服务器地址即可使用媒体库浏览、继续观看、断点同步与多音轨字幕切换。
-    客户端能解码的文件直接播放，不经过服务器转码；遇到客户端解不了的编码（例如部分 AV1 片源），
-    由服务器转码后再播，不会黑屏。<strong style="color:var(--text)">全部网络源（含 WebDAV / SMB）免费使用</strong>，
-    Emby / Jellyfin 用户不必再为第二个播放客户端付费。</p>
 </section>
 
 <section class="wrap" id="download">
