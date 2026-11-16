@@ -97,6 +97,12 @@
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
+  // 应用内购买：App 会把「会话码」带在 URL 上（?c=...），随订单送进 Paddle 的
+  // custom_data。支付完成后 Worker 凭这个会话码查设备上报的机器码、签码投递，
+  // App 正在轮询就能自动解锁 —— 用户不用抄机器码、也不用回网页领码。
+  var SESSION = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
+  if (!/^[0-9a-z]{6,20}$/.test(SESSION)) SESSION = "";
+
   Paddle.Environment.set("live");
   Paddle.Initialize({
     token: "live_f811472d9bcdb0940c70032701b",
@@ -104,21 +110,28 @@
       if (ev.name === "checkout.completed") {
         var m = document.getElementById("msg");
         m.className = "ok";
-        m.textContent = "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
+        m.textContent = SESSION
+          ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 几秒内会自动解锁；激活码同时发到你的邮箱。"
+          : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
       }
     }
   });
+  function checkoutOptions() {
+    var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
+    if (SESSION) opts.customData = { c: SESSION };
+    return opts;
+  }
   function openCheckout() {
     var m = document.getElementById("msg");
     try {
-      Paddle.Checkout.open({
-        items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }]
-      });
+      Paddle.Checkout.open(checkoutOptions());
     } catch (e) {
       m.className = "err";
       m.textContent = "结账暂时不可用，请稍后重试或邮件联系 support@lumenplay.app。";
     }
   }
+  // 从 App 点进来（带会话码）时直接拉起结账，少一次点击
+  if (SESSION) window.addEventListener("load", function () { setTimeout(openCheckout, 300); });
 </script>
 </body>
 </html>
