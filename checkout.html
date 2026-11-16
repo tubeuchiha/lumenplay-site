@@ -39,6 +39,8 @@
   #msg.ok { color:#3fb950; }
   #msg.err { color:#f85149; }
   .tip { color:var(--muted); font-size:13px; }
+  #noSession { display:none; }
+  #appBox { display:none; }
   #orderBox { display:none; text-align:left; }
   #orderBox code { background:#0d1117; border:1px solid var(--border); border-radius:6px;
                     padding:2px 8px; font-size:13px; }
@@ -51,7 +53,7 @@
 <div class="wrap">
   <div class="lang"><a href="checkout-en.html">English</a></div>
   <h1>购买 LumenPlay 完整版</h1>
-  <p class="meta">官网激活码渠道 · 一次买断 · 由 Paddle 提供支付与税务服务</p>
+  <p class="meta">直装渠道 · 一次买断 · 由 Paddle 提供支付与税务服务</p>
 
   <div class="price">
     <b>¥105</b>
@@ -59,7 +61,20 @@
     <span>一次买断 · 含 <strong>3 台设备</strong>激活授权（手机/电视混算）· 后续版本免费更新 · 价格含税，无任何隐藏费用</span>
   </div>
 
-  <div class="card" style="text-align:center;padding:32px 24px">
+  <div class="card" id="noSession" style="text-align:center;padding:36px 24px">
+    <h2 style="margin-top:0">请在 App 内购买</h2>
+    <p>LumenPlay 的购买入口在 App 内：装好 App，进入<strong>播放设置 → 解锁完整版</strong>，
+      点「立即购买 ¥105」，付款后<strong>这台设备自动解锁</strong>，不需要填写机器码。</p>
+    <p style="margin:20px 0 8px">
+      <a class="buy-btn" href="index.html#download" style="text-decoration:none">下载 LumenPlay</a>
+    </p>
+    <p class="tip">手机：App 内购买，本机几秒内自动解锁。<br>
+      TV / 电视盒：在电视上点「立即购买」，用手机扫码付款，电视自动解锁。</p>
+    <p class="tip" style="margin-top:16px">已经付过款、要为其他设备领码？凭<strong>订单号 + 机器码</strong>去
+      <a href="getcode.html">领码页</a>自助取码。</p>
+  </div>
+
+  <div class="card" id="appBox" style="text-align:center;padding:32px 24px">
     <button class="buy-btn" id="buyBtn" onclick="openCheckout()">立即购买 ¥105</button>
     <div id="msg"></div>
     <div id="orderBox" class="card">
@@ -79,17 +94,18 @@
     <tr><th style="width:130px">步骤</th><th>说明</th></tr>
     <tr>
       <td>① 完成支付</td>
-      <td>点击「立即购买」弹出安全结账窗口，选择支付方式完成付款。</td>
+      <td>在 App 内点「立即购买」会拉起这个页面的安全结账窗口，选支付宝 / 微信 / 银行卡 / PayPal 完成付款。</td>
     </tr>
     <tr>
-      <td>② 收到激活码</td>
-      <td>付款成功后，系统<strong>自动发送激活码邮件</strong>到你的支付邮箱（通常几分钟内，高峰期可能稍长）。
-        <span class="tip">没收到请检查垃圾邮件；也可凭订单号在<a href="getcode.html">领码页</a>自助取码；超过 1 小时仍有问题联系 support@lumenplay.app。</span></td>
+      <td>② 这台设备自动解锁</td>
+      <td>付款成功后，正在付款的设备<strong>几秒内自动解锁</strong>——回到 App 即可，不用抄激活码。
+        <span class="tip">激活码同时发到你的付款邮箱做长期备份。</span></td>
     </tr>
     <tr>
-      <td>③ App 内解锁</td>
-      <td>每台设备对应一个激活码：在 App 的<strong>播放设置 → 解锁完整版</strong>中输入激活码即完成解锁。
-        <span class="tip">激活码与设备机器码绑定；换机凭原订单号免费补发，详见退款政策与条款。</span></td>
+      <td>③ 其余设备领码</td>
+      <td>电视等其他设备：在 App 里取该设备 <strong>16 位机器码</strong>，用<strong>订单号</strong>到
+        <a href="getcode.html">领码页</a>自助领码（一单含 3 台设备授权，累计签发上限 5 枚）。
+        <span class="tip">重装系统机器码不变，原码可复用；恢复出厂或换机凭订单号免费重签。</span></td>
     </tr>
   </table>
 
@@ -117,6 +133,13 @@
   var SESSION = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
   if (!/^[0-9a-z]{6,20}$/.test(SESSION)) SESSION = "";
 
+  // 没有会话码 = 不是从 App 里点进来的 → 不提供结账入口。
+  // 唯一购买入口是 App 内：付款后本机自动解锁。网页直购会让用户「先付钱、再摸索安装」，
+  // 流程断裂且客服难定位，已下线（2026-11-16 决策）。
+  if (!SESSION) {
+    document.getElementById("noSession").style.display = "block";
+  } else {
+  document.getElementById("appBox").style.display = "block";
   Paddle.Environment.set("live");
   Paddle.Initialize({
     token: "live_f811472d9bcdb0940c70032701b",
@@ -139,6 +162,7 @@
       }
     }
   });
+  }
   function checkoutOptions() {
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
     if (SESSION) opts.customData = { c: SESSION };
@@ -158,6 +182,7 @@
     }
   }
   function openCheckout() {
+    if (!SESSION) return;   // 无会话码不结账（唯一入口在 App 内）
     var m = document.getElementById("msg");
     try {
       Paddle.Checkout.open(checkoutOptions());
