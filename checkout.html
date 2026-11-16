@@ -68,7 +68,7 @@
     <p style="margin:20px 0 8px">
       <a class="buy-btn" href="index.html#download" style="text-decoration:none">下载 LumenPlay</a>
     </p>
-    <p class="tip">手机：App 内购买，本机几秒内自动解锁。<br>
+    <p class="tip">手机：App 内购买，本机付款后自动解锁。<br>
       TV / 电视盒：在电视上点「立即购买」，用手机扫码付款，电视自动解锁。</p>
     <p class="tip" style="margin-top:16px">已经付过款、要为其他设备领码？凭<strong>订单号 + 机器码</strong>去
       <a href="getcode.html">领码页</a>自助取码。</p>
@@ -98,7 +98,7 @@
     </tr>
     <tr>
       <td>② 这台设备自动解锁</td>
-      <td>付款成功后，正在付款的设备<strong>几秒内自动解锁</strong>——回到 App 即可，不用抄激活码。
+      <td>付款成功后，正在付款的设备<strong>自动解锁</strong>——回到 App 即可，不用抄激活码（若网络较慢可能需稍等）。
         <span class="tip">激活码同时发到你的付款邮箱做长期备份。</span></td>
     </tr>
     <tr>
@@ -148,7 +148,7 @@
         var m = document.getElementById("msg");
         m.className = "ok";
         m.textContent = SESSION
-          ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 几秒内会自动解锁；激活码同时发到你的邮箱。"
+          ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 设备会自动解锁；激活码同时发到你的邮箱。"
           : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
         // 订单号与邮箱回显：邮箱填错时用户仍可凭订单号在领码页自助取码
         var d = (ev && ev.data) || {};

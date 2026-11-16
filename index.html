@@ -98,11 +98,11 @@
   <h2>功能一览</h2>
   <div class="grid">
     <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪；带宽与硬件允许的前提下，4K 长片流畅稳定。</p></div>
-    <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传，普通屏幕自动色调映射。杜比视界与 Atmos 需要设备本身支持：支持的设备上自动启用专用通路；含 HDR10 兼容层的片源（Profile 8）在不支持的设备上按基础层播放。Profile 5 没有兼容底层，设备不支持杜比视界时会偏色——播放器会明确提示，不冒充正常画面。</p></div>
+    <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传，普通屏幕自动色调映射。杜比视界与 Atmos 需要设备本身支持：支持的设备上自动启用专用通路；含 HDR10 兼容层的片源（Profile 8）在不支持的设备上按基础层播放。Profile 5 没有兼容图层，设备不支持杜比视界时由播放器映射为 SDR 画面播放，不出现偏色花屏。</p></div>
     <div class="card"><h3>原码直通</h3><p>在设备与功放同时支持的条件下，LumenPlay 将杜比系 / DTS 系音频的原始码流输出至功放解码，不经过解码转码。设备或功放不支持该编码时，音轨自动解码为 PCM 输出，影片照常播放。</p></div>
     <div class="card"><h3>原盘 ISO / BDMV 播放</h3><p>直接打开蓝光原盘的 ISO 镜像或 BDMV 目录结构（本地存储或 SMB 共享），自动定位正片开始播放，无需先解包、无需第三方工具。</p></div>
     <div class="card"><h3>ASS / SSA 特效字幕</h3><p>内嵌 ASS / SSA 字幕按原样渲染：定位、字体样式与颜色、描边阴影、淡入淡出、卡拉OK 逐字上色、CJK 长句自动换行完整还原，4K 画面下清晰锐利。SRT / PGS / TTML 等其余字幕格式全版本可用。</p></div>
-    <div class="card"><h3>自动帧率匹配（免费）</h3><p>起播时把电视 / 显示器刷新率切换到与片源一致（如 23.976 帧的片源 → 23.976Hz），横移镜头不再一顿一顿。设备没有对应档位时静默不变，不打扰。免费提供，默认开启。</p></div>
+    <div class="card"><h3>自动帧率匹配</h3><p>起播时把电视 / 显示器刷新率切换到与片源一致（如 23.976 帧的片源 → 23.976Hz），横移镜头不再一顿一顿。设备没有对应档位时静默不变，不打扰。免费提供，默认开启。</p></div>
     <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
     <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按带宽自动切换清晰度，减少卡顿与缓冲。</p></div>
     <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
@@ -130,7 +130,7 @@
       <td>② 在 App 内购买</td>
       <td>进入<strong>播放设置 → 解锁完整版</strong>，点<strong>「立即购买 ¥105」</strong>，在弹出的 Paddle 结账页付款
         （支付宝 / 微信 / 银行卡 / PayPal）。
-        <strong>付款后这台设备几秒内自动解锁</strong>，不用填机器码；激活码同时发到你的付款邮箱。
+        <strong>付款后这台设备自动解锁</strong>（一般很快，偶尔因网络情况需稍等片刻），不用填机器码；激活码同时发到你的付款邮箱。
         <span class="tip">电视上点「立即购买」会显示二维码——用手机扫码付款，电视自动解锁，遥控器不用输入任何东西。</span></td>
     </tr>
     <tr>
@@ -180,7 +180,7 @@
   <p style="margin:18px 0 6px">
     <a href="#download" style="display:inline-block;background:var(--accent);color:#1a1a1a;padding:12px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none">下载 LumenPlay</a>
     <span class="tip" style="display:block;margin-top:8px">购买在 App 内完成（播放设置 → 解锁完整版 → 立即购买 ¥105），
-    支付宝 / 微信 / 银行卡 / PayPal 由 Paddle 安全处理；付款后设备自动解锁，通常几秒。</span>
+    支付宝 / 微信 / 银行卡 / PayPal 由 Paddle 安全处理；付款后设备自动解锁，若网络较慢可能需要稍等。</span>
   </p>
 
   <p style="color:var(--muted);font-size:13px;margin-top:14px">
