@@ -31,10 +31,10 @@
   .btn:hover { opacity: .85; text-decoration: none; }
   section { border-top: 1px solid #30363d; padding: 36px 0; border-top: 1px solid var(--border); }
   section h2 { font-size: 24px; margin-bottom: 20px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
   .card { background: #161b22; border: 1px solid #30363d;
-    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-  .card h3 { color: #e8b93c; font-size: 16px; margin-bottom: 8px; color: var(--accent); }
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 26px 26px; }
+  .card h3 { color: #e8b93c; font-size: 18px; margin-bottom: 14px; letter-spacing: .3px; color: var(--accent); }
   .card p { color: #8b949e; color: var(--muted); font-size: 14px; }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { border-bottom: 1px solid #30363d; padding: 10px 12px;
@@ -66,16 +66,15 @@
 <section class="wrap" id="features">
   <h2>Features</h2>
   <div class="grid">
-    <div class="card"><h3>A playback core built for 4K</h3><p>No reliance on the system player, so frame scheduling is far more precise: seeking lands exactly where you point, and long 4K films stay smooth when bandwidth and hardware allow.</p></div>
+    <div class="card"><h3>Custom playback core</h3><p>A demux, decode and A/V sync pipeline built on FFmpeg, independent of the system player: seeks land on the target frame, scheduling and buffering are fully under our control, and long 4K high-bitrate titles play smoothly end to end.</p></div>
     <div class="card"><h3>HDR / Dolby Vision</h3><p>HDR10 / HLG metadata is passed through, with automatic tone mapping on regular displays. Dolby Vision and Atmos require device support: supported devices use the dedicated path automatically; sources with an HDR10-compatible base layer (Profile 8) fall back to it on unsupported devices. Profile 5 has no base layer — on devices without Dolby Vision, the player maps it to SDR playback so the picture does not break.</p></div>
-    <div class="card"><h3>Bitstream passthrough</h3><p>Where both the device and the AV receiver support it, LumenPlay sends the original Dolby / DTS bitstream to the receiver for decoding, with no decode-and-re-encode step. If either end lacks support, the track is decoded to PCM and the film plays as usual.</p></div>
-    <div class="card"><h3>ISO / BDMV disc playback</h3><p>Open a Blu-ray ISO image or BDMV folder structure directly (local storage or an SMB share). The main feature is located and played automatically — no unpacking, no third-party tools.</p></div>
-    <div class="card"><h3>ASS / SSA styled subtitles</h3><p>Embedded ASS / SSA subtitles render as authored: positioning, fonts, colours, outlines and shadows, fades, karaoke timing and CJK line breaking are all preserved, crisp on a 4K picture. SRT / PGS / TTML and other formats are available in every edition.</p></div>
-    <div class="card"><h3>Automatic frame-rate matching</h3><p>At playback start the display refresh rate is switched to match the source (a 23.976 fps film plays at 23.976 Hz), so camera pans stop juddering. If the device has no matching mode, nothing changes. Free and on by default.</p></div>
-    <div class="card"><h3>Self-hosted libraries</h3><p>Jellyfin and Emby both supported natively; WebDAV and SMB (Windows shares / NAS) work out of the box. Credentials are encrypted on the device.</p></div>
-    <div class="card"><h3>Steadier network playback</h3><p>Adaptive bitrate (ABR): when playing HLS / DASH streams (.m3u8 / .mpd) quality is switched to match bandwidth, reducing stalls and buffering.</p></div>
-    <div class="card"><h3>Large files, high bitrates</h3><p>MKV / MP4 files beyond 4 GB and high-bitrate titles play reliably. Transient network drops are retried automatically and playback resumes; if you stop for longer, reopening returns you to where you left off.</p></div>
-    <div class="card"><h3>Many subtitle formats</h3><p>SRT / ASS / SSA / PGS / TTML, with automatic external-subtitle matching, track switching and independent delay adjustment.</p></div>
+    <div class="card"><h3>Audio bitstream passthrough</h3><p>Where both the device and the AV receiver support it, the original Dolby / DTS bitstream is sent to the receiver undecoded, preserving studio dynamic range and channel layout. If any link lacks support, output falls back to PCM decoding without interrupting playback.</p></div>
+    <div class="card"><h3>ISO / BDMV disc playback</h3><p>Reads Blu-ray ISO images and BDMV folder structures directly (local storage or SMB share), parses PLAYLIST entries to locate the main feature — no unpacking, no third-party tools.</p></div>
+    <div class="card"><h3>Professional subtitle rendering</h3><p>A libass-based pipeline renders ASS / SSA subtitles exactly as authored: absolute positioning, font styling, outlines and shadows, fades, karaoke timing and CJK line breaking, crisp at 4K. SRT / PGS / TTML and other formats are also supported, with automatic external-subtitle matching, track switching and independent delay adjustment.</p></div>
+    <div class="card"><h3>Automatic frame-rate matching</h3><p>At playback start the display refresh rate is switched to match the source (23.976 fps → 23.976 Hz), removing rhythmic motion judder. If the device has no matching mode, playback continues unchanged. Free and on by default.</p></div>
+    <div class="card"><h3>Self-hosted libraries</h3><p>Native Jellyfin and Emby clients; WebDAV and SMB (Windows shares / NAS) work out of the box. Credentials are encrypted and stored on the device only.</p></div>
+    <div class="card"><h3>Steadier network playback</h3><p>Adaptive bitrate (ABR): when playing HLS / DASH streams (.m3u8 / .mpd), quality is switched dynamically to match available bandwidth, with multi-level buffering to reduce stalls and rebuffering.</p></div>
+    <div class="card"><h3>Large files, high bitrates</h3><p>MKV / MP4 files beyond 4 GB and high-bitrate titles play reliably. Transient network drops are retried automatically with seamless resume; after longer interruptions, reopening returns to the last playback position.</p></div>
   </div>
   <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
     <strong style="color:var(--text)">Jellyfin / Emby, one client for both</strong>: enter the server address on

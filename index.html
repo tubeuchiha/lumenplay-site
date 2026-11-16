@@ -38,15 +38,15 @@
   section {  border-top: 1px solid #30363d;
   padding: 36px 0; border-top: 1px solid var(--border);}
   section h2 { font-size: 24px; margin-bottom: 20px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 22px; }
   .card {  background: #161b22;
     border: 1px solid #30363d;
   background: var(--panel); border: 1px solid var(--border);
-  border-radius: 10px; padding: 20px;}
+  border-radius: 12px; padding: 26px 26px;}
   .card h3 {  color: #e8b93c;
-  font-size: 16px; margin-bottom: 8px; color: var(--accent);}
+  font-size: 18px; margin-bottom: 14px; color: var(--accent); letter-spacing: .3px;}
   .card p {  color: #8b949e;
-  color: var(--muted); font-size: 14px;}
+  color: var(--muted); font-size: 15px; line-height: 1.9;}
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td {  border-bottom: 1px solid #30363d;
   padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left;}
@@ -97,20 +97,19 @@
 <section class="wrap" id="features">
   <h2>功能一览</h2>
   <div class="grid">
-    <div class="card"><h3>为 4K 而生的播放内核</h3><p>不依赖系统播放器，画面调度更精细：拖动进度条指哪打哪；带宽与硬件允许的前提下，4K 长片流畅稳定。</p></div>
+    <div class="card"><h3>自研播放内核</h3><p>基于 FFmpeg 自建解封装、解码与音视频同步管线，不依赖系统播放器：seek 直接定位目标帧，画面调度与缓冲策略自主可控，4K 高码率长片全程稳定流畅。</p></div>
     <div class="card"><h3>HDR / 杜比视界</h3><p>HDR10 / HLG 元数据透传，普通屏幕自动色调映射。杜比视界与 Atmos 需要设备本身支持：支持的设备上自动启用专用通路；含 HDR10 兼容层的片源（Profile 8）在不支持的设备上按基础层播放。Profile 5 没有兼容图层，设备不支持杜比视界时由播放器映射为 SDR 画面播放，不出现偏色花屏。</p></div>
-    <div class="card"><h3>原码直通</h3><p>在设备与功放同时支持的条件下，LumenPlay 将杜比系 / DTS 系音频的原始码流输出至功放解码，不经过解码转码。设备或功放不支持该编码时，音轨自动解码为 PCM 输出，影片照常播放。</p></div>
-    <div class="card"><h3>原盘 ISO / BDMV 播放</h3><p>直接打开蓝光原盘的 ISO 镜像或 BDMV 目录结构（本地存储或 SMB 共享），自动定位正片开始播放，无需先解包、无需第三方工具。</p></div>
-    <div class="card"><h3>ASS / SSA 特效字幕</h3><p>内嵌 ASS / SSA 字幕按原样渲染：定位、字体样式与颜色、描边阴影、淡入淡出、卡拉OK 逐字上色、CJK 长句自动换行完整还原，4K 画面下清晰锐利。SRT / PGS / TTML 等其余字幕格式全版本可用。</p></div>
-    <div class="card"><h3>自动帧率匹配</h3><p>起播时把电视 / 显示器刷新率切换到与片源一致（如 23.976 帧的片源 → 23.976Hz），横移镜头不再一顿一顿。设备没有对应档位时静默不变，不打扰。免费提供，默认开启。</p></div>
-    <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连，密码本机加密存储。</p></div>
-    <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按带宽自动切换清晰度，减少卡顿与缓冲。</p></div>
-    <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断时自动重试，恢复后接着播；中断较久也不怕，重新打开会回到上次进度。</p></div>
-    <div class="card"><h3>支持多种格式字幕</h3><p>SRT / ASS / SSA / PGS / TTML，外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
+    <div class="card"><h3>音频原码直通</h3><p>在设备与功放同时支持的条件下，将杜比系 / DTS 系音频的原始码流不经解码直接输出至功放，保留录音室级动态范围与声道布局；任一环节不支持该编码时，自动回退为 PCM 解码输出，播放不中断。</p></div>
+    <div class="card"><h3>原盘 ISO / BDMV 播放</h3><p>直接读取蓝光原盘 ISO 镜像与 BDMV 目录结构（本地存储或 SMB 共享），解析 PLAYLIST 自动定位正片，无需解包、无需第三方工具。</p></div>
+    <div class="card"><h3>专业字幕渲染引擎</h3><p>内置 libass 渲染管线，ASS / SSA 特效字幕按作者意图逐项还原：绝对定位、字体样式、描边阴影、淡入淡出、卡拉OK 逐字上色与 CJK 智能换行，4K 分辨率下清晰锐利。另支持 SRT / PGS / TTML 等格式：外挂字幕自动匹配、多轨切换、独立延迟调节。</p></div>
+    <div class="card"><h3>自动帧率匹配</h3><p>起播时将显示设备刷新率切换至与片源帧率一致（如 23.976 fps → 23.976 Hz），消除运动画面的规律性抖动（judder）；设备无对应档位时保持原状，不影响播放。免费提供，默认开启。</p></div>
+    <div class="card"><h3>自建媒体库直连</h3><p>Jellyfin / Emby 双协议原生直连，WebDAV / SMB（Windows 共享 / NAS）开箱即连；凭据经加密后仅存本机，不上传服务器。</p></div>
+    <div class="card"><h3>网络播放更稳</h3><p>自适应码率（ABR）：播放 HLS / DASH 自适应流（.m3u8 / .mpd）时按实时带宽动态切换清晰度，配合多级缓冲策略降低卡顿与重缓冲次数。</p></div>
+    <div class="card"><h3>大文件与高码率</h3><p>支持超过 4GB 的 MKV / MP4 大文件与高码率影片稳定播放；网络闪断自动重试、断点续播，长时间中断后重新打开即恢复至上次进度。</p></div>
   </div>
   <p style="color:var(--muted);font-size:14px;margin-top:16px;line-height:1.8">
-    <strong style="color:var(--text)">Jellyfin / Emby 双协议直连</strong>：两款主流家庭媒体服务器一套客户端全搞定——
-    同一个登录页填服务器地址即可，媒体库、继续观看、断点同步、多音轨字幕均可用。
+    <strong style="color:var(--text)">Jellyfin / Emby 双协议直连</strong>：两款主流家庭媒体服务器共用同一登录入口，
+    填入服务器地址即可使用媒体库浏览、继续观看、断点同步与多音轨字幕切换。
     客户端能解码的文件直接播放，不经过服务器转码；遇到客户端解不了的编码（例如部分 AV1 片源），
     由服务器转码后再播，不会黑屏。<strong style="color:var(--text)">全部网络源（含 WebDAV / SMB）免费使用</strong>，
     Emby / Jellyfin 用户不必再为第二个播放客户端付费。</p>
