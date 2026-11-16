@@ -162,7 +162,7 @@
 
   // ---- 阶段 1：把激活码投给电视 ----
   // 电视端解锁卡开着时会每 3 秒轮询 /api/device/poll?c=<短码>，本页提交后
-  // 电视几秒内自动完成激活，用户无需在电视上输入任何内容。
+  // 电视通常在 1 分钟内自动完成激活（云端 KV 传播有延迟），用户无需在电视上输入任何内容。
   var redeemBtn = document.getElementById('redeemBtn');
   var redeemMsg = document.getElementById('redeemMsg');
   function showRedeem(text, isError) {
@@ -193,7 +193,7 @@
       });
     }).then(function (ret) {
       if (ret.ok && ret.j.ok) {
-        showRedeem('已提交，电视会在几秒内自动解锁 ✓', false);
+        showRedeem('已提交，电视通常 1 分钟内自动解锁 ✓', false);
         redeemBtn.textContent = '已提交';
         return;
       }
