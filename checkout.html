@@ -39,6 +39,12 @@
   #msg.ok { color:#3fb950; }
   #msg.err { color:#f85149; }
   .tip { color:var(--muted); font-size:13px; }
+  #orderBox { display:none; text-align:left; }
+  #orderBox code { background:#0d1117; border:1px solid var(--border); border-radius:6px;
+                    padding:2px 8px; font-size:13px; }
+  #orderBox button { background:var(--panel); color:var(--text); border:1px solid var(--border);
+                     border-radius:6px; padding:2px 10px; font-size:13px; cursor:pointer; }
+  #orderBox button:hover { border-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -56,6 +62,14 @@
   <div class="card" style="text-align:center;padding:32px 24px">
     <button class="buy-btn" id="buyBtn" onclick="openCheckout()">立即购买 ¥105</button>
     <div id="msg"></div>
+    <div id="orderBox" class="card">
+      <p style="margin-bottom:6px"><strong>订单号</strong>
+        <code id="orderId"></code>
+        <button onclick="copyOrder()" id="copyBtn">复制</button></p>
+      <p class="tip">激活码已发往 <strong id="orderEmail"></strong>。
+        没收到？凭<strong>订单号 + 机器码</strong>到<a href="getcode.html">领码页</a>可自助取码
+        （不依赖邮箱，邮箱填错也能补救）。</p>
+    </div>
     <p class="tip" style="margin-top:14px">支持支付宝 / 微信支付（中国）· PayPal / 银行卡 / Apple Pay（海外）<br>
     支付页由 Paddle 加密处理，我们不接触你的银行卡信息。</p>
   </div>
@@ -70,7 +84,7 @@
     <tr>
       <td>② 收到激活码</td>
       <td>付款成功后，系统<strong>自动发送激活码邮件</strong>到你的支付邮箱（通常几分钟内，高峰期可能稍长）。
-        <span class="tip">没收到请检查垃圾邮件；超过 1 小时未收到联系 support@lumenplay.app。</span></td>
+        <span class="tip">没收到请检查垃圾邮件；也可凭订单号在<a href="getcode.html">领码页</a>自助取码；超过 1 小时仍有问题联系 support@lumenplay.app。</span></td>
     </tr>
     <tr>
       <td>③ App 内解锁</td>
@@ -113,6 +127,15 @@
         m.textContent = SESSION
           ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 几秒内会自动解锁；激活码同时发到你的邮箱。"
           : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
+        // 订单号与邮箱回显：邮箱填错时用户仍可凭订单号在领码页自助取码
+        var d = (ev && ev.data) || {};
+        var txn = d.transaction_id || "";
+        var email = (d.customer && d.customer.email) || "";
+        if (txn) {
+          document.getElementById("orderId").textContent = txn;
+          document.getElementById("orderEmail").textContent = email || "（支付页未返回）";
+          document.getElementById("orderBox").style.display = "block";
+        }
       }
     }
   });
@@ -120,6 +143,19 @@
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
     if (SESSION) opts.customData = { c: SESSION };
     return opts;
+  }
+  function copyOrder() {
+    var txn = document.getElementById("orderId").textContent;
+    var btn = document.getElementById("copyBtn");
+    var done = function () { btn.textContent = "已复制"; setTimeout(function () { btn.textContent = "复制"; }, 1500); };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(txn).then(done, done);
+    } else {
+      var r = document.createRange(); r.selectNode(document.getElementById("orderId"));
+      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+      try { document.execCommand("copy"); } catch (e) {}
+      done();
+    }
   }
   function openCheckout() {
     var m = document.getElementById("msg");

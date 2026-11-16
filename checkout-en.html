@@ -38,6 +38,12 @@
   #msg.ok { color:#3fb950; }
   #msg.err { color:#f85149; }
   .tip { color:var(--muted); font-size:13px; }
+  #orderBox { display:none; text-align:left; }
+  #orderBox code { background:#0d1117; border:1px solid var(--border); border-radius:6px;
+                    padding:2px 8px; font-size:13px; }
+  #orderBox button { background:var(--panel); color:var(--text); border:1px solid var(--border);
+                     border-radius:6px; padding:2px 10px; font-size:13px; cursor:pointer; }
+  #orderBox button:hover { border-color:var(--accent); }
 </style>
 </head>
 <body>
@@ -55,6 +61,14 @@
   <div class="card" style="text-align:center;padding:32px 24px">
     <button class="buy-btn" id="buyBtn" onclick="openCheckout()">Buy now — ¥105</button>
     <div id="msg"></div>
+    <div id="orderBox" class="card">
+      <p style="margin-bottom:6px"><strong>Order ID</strong>
+        <code id="orderId"></code>
+        <button onclick="copyOrder()" id="copyBtn">Copy</button></p>
+      <p class="tip">Codes were sent to <strong id="orderEmail"></strong>.
+        Didn't get them? Use your <strong>order ID + machine code</strong> on the
+        <a href="getcode-en.html">code page</a> to retrieve them yourself — no email needed.</p>
+    </div>
     <p class="tip" style="margin-top:14px">Alipay / WeChat Pay (China) · PayPal / Cards / Apple Pay (worldwide)<br>
     Checkout is encrypted and processed by Paddle. We never see your card details.</p>
   </div>
@@ -69,7 +83,7 @@
     <tr>
       <td>② Receive codes</td>
       <td>After payment, an <strong>activation-code email is sent automatically</strong> to the email address used for payment (usually within minutes).
-        <span class="tip">Check your spam folder if it does not arrive; if nothing after 1 hour, email support@lumenplay.app.</span></td>
+        <span class="tip">Check your spam folder. You can also retrieve codes yourself with your order ID on the <a href="getcode-en.html">code page</a> (no email needed). Still stuck after 1 hour? Email support@lumenplay.app.</span></td>
     </tr>
     <tr>
       <td>③ Unlock in app</td>
@@ -113,6 +127,16 @@
         m.textContent = SESSION
           ? "✅ Payment received! Your licence is being sent to your device — go back to LumenPlay and it will usually unlock within seconds. The code is also emailed to you."
           : "✅ Payment received! Activation codes are on their way to your email — please check your inbox and spam folder.";
+        // Show order ID + email: if the email was mistyped, the order ID still lets
+        // the buyer retrieve codes from the code page.
+        var d = (ev && ev.data) || {};
+        var txn = d.transaction_id || "";
+        var email = (d.customer && d.customer.email) || "";
+        if (txn) {
+          document.getElementById("orderId").textContent = txn;
+          document.getElementById("orderEmail").textContent = email || "(not returned)";
+          document.getElementById("orderBox").style.display = "block";
+        }
       }
     }
   });
@@ -120,6 +144,19 @@
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
     if (SESSION) opts.customData = { c: SESSION };
     return opts;
+  }
+  function copyOrder() {
+    var txn = document.getElementById("orderId").textContent;
+    var btn = document.getElementById("copyBtn");
+    var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1500); };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(txn).then(done, done);
+    } else {
+      var r = document.createRange(); r.selectNode(document.getElementById("orderId"));
+      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+      try { document.execCommand("copy"); } catch (e) {}
+      done();
+    }
   }
   function openCheckout() {
     var m = document.getElementById("msg");
