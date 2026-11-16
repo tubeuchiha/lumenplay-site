@@ -21,11 +21,10 @@
  *   - 鉴权走 ADMIN_TOKEN secret（x-admin-token 头或 t= 查询参数），
  *     不限速（令牌私有）。
  *
- * 会话码 → 机器码绑定（2026-11-16，应用内购买用）：
- *   设备首次 poll 可用 `&m=<16位机器码>` 上报自己的机器码，Worker 存进会话记录。
- *   支付成功后的签码只认这里登记过的机器码 —— 结账页 custom_data 里的会话码
- *   由买家浏览器传递，不可信；机器码一律以设备自报为准，防止把码签到他人设备。
- *   手机端会话码用 12 位随机串（不显示，只做会话锚点），TV 仍用 6 位纯数字。
+ * 会话码 → 机器码绑定：已迁出（2026-11-16）。应用内购买改由 license worker 的
+ * `/pay/poll` + D1 强一致存储承担（KV 的边缘缓存会让设备付款后干等 40-60 秒），
+ * 本 Worker 只服务 TV 扫码流：6 位纯数字短码，人工投码，激活码本身已绑定机器码，
+ * 不需要会话级机器码登记。
  *
  * 安全边界：
  *   - 激活码本身是 RSA 签名且绑定机器码，即使短码被猜到也无法伪造激活，
@@ -44,10 +43,10 @@ const DELIVERED_TTL_SECONDS = 604800; // 发码方投递的码保留 7 天（TV 
 const MAX_SUBMITS_PER_HOUR = 30;   // 单 IP 每小时提交上限
 const MAX_ACTIVATION_LEN = 4096;   // 激活码长度上限（正常 200~400 字符）
 
-// 会话码：TV 端是 6 位纯数字（遥控器可打），手机端是 12 位随机串（不显示、只用于
-// 会话绑定，避免与 TV 的 6 位空间碰撞串号）。统一按 6~20 位小写字母数字校验。
+// 短码：TV 端 6 位纯数字（遥控器可打）。CODE_RE 仍按 6~20 位小写字母数字校验
+// （历史会话码是 12 位随机串，放宽校验避免把旧链接判死），
+// MACHINE_RE 随机器码绑定一起删除——本 Worker 不再关心机器码。
 const CODE_RE = /^[0-9a-z]{6,20}$/;
-const MACHINE_RE = /^[0-9a-f]{16}$/;   // 与 ActivationCodeProvider 的机器码口径一致
 
 const CORS = {
   'access-control-allow-origin': '*',
@@ -108,17 +107,10 @@ function activationShapeOk(activation) {
 
 /**
  * 设备轮询：优先取发码方投递的码（d:），其次登记/续期会话；有码则消费返回。
- *
- * 首次轮询同时完成「会话码 → 机器码」绑定（`m` 参数）。购买流程靠这个绑定签码：
- * 结账页的 custom_data 只有会话码，机器码一律取设备自报的值 —— 买家改不了
- * 浏览器里的 custom_data，也就无法把码签到别人设备上。
  */
 async function poll(url, env) {
   const code = (url.searchParams.get('c') || '').trim().toLowerCase();
   if (!CODE_RE.test(code)) return json({ error: 'bad_code' }, 400);
-
-  const machine = (url.searchParams.get('m') || '').trim().toLowerCase();
-  if (machine && !MACHINE_RE.test(machine)) return json({ error: 'bad_machine' }, 400);
 
   // 发码方可能早已投递（admin-deliver 不要求 TV 在轮询），优先消费
   const dKey = `d:${code}`;
@@ -133,7 +125,7 @@ async function poll(url, env) {
 
   // 首次轮询 = 设备登记（submit 只认登记过的短码，挡住逐码盲投）
   if (raw == null) {
-    await env.DEVICE_KV.put(key, JSON.stringify({ ts: Date.now(), m: machine || null }), {
+    await env.DEVICE_KV.put(key, JSON.stringify({ ts: Date.now() }), {
       expirationTtl: TTL_SECONDS,
     });
     return json({ status: 'waiting' });
@@ -145,12 +137,6 @@ async function poll(url, env) {
   } catch {
     rec = { ts: Date.now() };
   }
-
-  // 同一会话码被两台设备用（极小概率碰撞）→ 让后来者换一个码，避免串号
-  if (rec.m && machine && rec.m !== machine) {
-    return json({ error: 'code_conflict' }, 409);
-  }
-  if (!rec.m && machine) rec.m = machine;   // 兼容老版本客户端（先 poll 后带 m）
 
   if (!rec.activation) {
     // 用户还停在解锁卡上等 → 续期，别让短码在等待途中过期
