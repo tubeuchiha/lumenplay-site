@@ -166,7 +166,8 @@
   } else {
   document.getElementById("appBox").style.display = "block";
   try {
-    Paddle.Environment.set("live");
+    // Production is the default. Environment.set() only accepts sandbox/production — not "live".
+    // Passing "live" made Paddle resolve it as a hostname, so checkout never rendered (2026-11-17).
     diag("Environment: " + Paddle.Environment.get());
   Paddle.Initialize({
     token: "live_f811472d9bcdb0940c70032701b",

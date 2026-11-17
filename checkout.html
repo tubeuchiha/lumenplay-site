@@ -166,7 +166,9 @@
   } else {
     document.getElementById("appBox").style.display = "block";
     try {
-      Paddle.Environment.set("live");
+      // Paddle 生产环境是默认值（Environment.set 只接受 sandbox/production，没有 "live"）。
+      // 这里不调用 Environment.set：传 live_ 开头的 client token 即走 production。
+      // 曾误传 "live"，Paddle 把它当域名解析 → 结账浮层永远不渲染（2026-11-17 坑）。
       diag("环境: " + Paddle.Environment.get());
       Paddle.Initialize({
         token: "live_f811472d9bcdb0940c70032701b",
