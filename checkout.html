@@ -140,6 +140,15 @@
   window.addEventListener("error", function (e) {
     diag("JS错误: " + e.message + " (" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")");
   });
+  // Paddle.js 初始化失败/Checkout 被拒时会 console.error 真实原因（如
+  // transaction_default_checkout_url_not_set、invalid client token），捕获出来。
+  if (DEBUG) {
+    var _err = console.error;
+    console.error = function () {
+      diag("Paddle报错: " + Array.prototype.slice.call(arguments).join(" "));
+      _err.apply(console, arguments);
+    };
+  }
 
   // 应用内购买：App 会把「会话码」带在 URL 上（?c=...），随订单送进 Paddle 的
   // custom_data。支付完成后 Worker 凭这个会话码查设备上报的机器码、签码投递，

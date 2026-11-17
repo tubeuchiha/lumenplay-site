@@ -139,6 +139,15 @@
   window.addEventListener("error", function (e) {
     diag("JS error: " + e.message + " (" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")");
   });
+  // Paddle.js logs the real failure reason to console.error when Checkout is
+  // rejected (e.g. transaction_default_checkout_url_not_set). Capture it.
+  if (DEBUG) {
+    var _err = console.error;
+    console.error = function () {
+      diag("Paddle error: " + Array.prototype.slice.call(arguments).join(" "));
+      _err.apply(console, arguments);
+    };
+  }
 
   // In-app purchase: the app appends its session code (?c=...), which travels with
   // the order in Paddle's custom_data. After payment the Worker looks up the machine
