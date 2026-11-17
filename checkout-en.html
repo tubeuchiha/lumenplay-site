@@ -76,6 +76,7 @@
   <div class="card" id="appBox" style="text-align:center;padding:32px 24px">
     <button class="buy-btn" id="buyBtn" onclick="openCheckout()">Buy now — ¥105</button>
     <div id="msg"></div>
+    <div id="diagBox" style="display:none;margin-top:14px;padding:10px 12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);text-align:left;word-break:break-all;line-height:1.7"></div>
     <div id="orderBox" class="card">
       <p style="margin-bottom:6px"><strong>Order ID</strong>
         <code id="orderId"></code>
@@ -126,25 +127,42 @@
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
-  // No session code = not opened from the app → no checkout here.
-  // The only purchase entry point is inside the app (the paying device unlocks itself).
-  // Website direct purchase was retired on 2026-11-16: it made buyers pay before they
-  // had the app installed and was hard to troubleshoot.
-  if (!SESSION) {
-    document.getElementById("noSession").style.display = "block";
-  } else {
-  document.getElementById("appBox").style.display = "block";
-  Paddle.Environment.set("live");
+  // Temporary diagnostics: with ?debug=1 surface checkout script state on the page.
+  // Invisible to normal users — diagBox is display:none unless the debug param is set.
+  var DEBUG = new URLSearchParams(location.search).get("debug") === "1";
+  var diagBox = document.getElementById("diagBox");
+  function diag(s) {
+    if (!DEBUG || !diagBox) return;
+    diagBox.style.display = "block";
+    diagBox.innerHTML += s + "<br>";
+  }
+  window.addEventListener("error", function (e) {
+    diag("JS error: " + e.message + " (" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")");
+  });
+
   // In-app purchase: the app appends its session code (?c=...), which travels with
   // the order in Paddle's custom_data. After payment the Worker looks up the machine
   // code the device reported, signs a licence and pushes it back — the app is polling,
   // so it unlocks by itself.
   var SESSION = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
   if (!/^[0-9a-z]{6,20}$/.test(SESSION)) SESSION = "";
+  diag("Session: " + (SESSION || "none"));
+  diag("Paddle object: " + (typeof Paddle));
 
+  // No session code = not opened from the app → no checkout here.
+  // The only purchase entry point is inside the app (the paying device unlocks itself).
+  // Website direct purchase was retired on 2026-11-16.
+  if (!SESSION) {
+    document.getElementById("noSession").style.display = "block";
+  } else {
+  document.getElementById("appBox").style.display = "block";
+  try {
+    Paddle.Environment.set("live");
+    diag("Environment: " + Paddle.Environment.get());
   Paddle.Initialize({
     token: "live_f811472d9bcdb0940c70032701b",
     eventCallback: function (ev) {
+      diag("Paddle event: " + ev.name + (ev.error ? " / " + JSON.stringify(ev.error) : ""));
       if (ev.name === "checkout.completed") {
         var m = document.getElementById("msg");
         m.className = "ok";
@@ -164,6 +182,13 @@
       }
     }
   });
+    diag("Initialize done");
+    } catch (e) {
+      diag("Init error: " + e.message);
+      var m0 = document.getElementById("msg");
+      m0.className = "err";
+      m0.textContent = "Payment component failed to load. Please refresh or email support@lumenplay.app.";
+    }
   }
   function checkoutOptions() {
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
@@ -186,11 +211,20 @@
   function openCheckout() {
     if (!SESSION) return;   // no session code: the only entry point is inside the app
     var m = document.getElementById("msg");
+    diag("Opening checkout");
+    if (typeof Paddle === "undefined" || !Paddle.Checkout) {
+      diag("Paddle not loaded — CDN script may be blocked");
+      m.className = "err";
+      m.textContent = "Payment component not loaded. Check your connection and refresh.";
+      return;
+    }
     try {
       Paddle.Checkout.open(checkoutOptions());
+      diag("Checkout.open called");
     } catch (e) {
+      diag("Checkout error: " + e.message);
       m.className = "err";
-      m.textContent = "Checkout is temporarily unavailable. Please try again later or email support@lumenplay.app.";
+      m.textContent = "Checkout unavailable: " + e.message + ". Or email support@lumenplay.app.";
     }
   }
   if (SESSION) window.addEventListener("load", function () { setTimeout(openCheckout, 300); });

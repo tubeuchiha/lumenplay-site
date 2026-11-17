@@ -77,6 +77,7 @@
   <div class="card" id="appBox" style="text-align:center;padding:32px 24px">
     <button class="buy-btn" id="buyBtn" onclick="openCheckout()">立即购买 ¥105</button>
     <div id="msg"></div>
+    <div id="diagBox" style="display:none;margin-top:14px;padding:10px 12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);text-align:left;word-break:break-all;line-height:1.7"></div>
     <div id="orderBox" class="card">
       <p style="margin-bottom:6px"><strong>订单号</strong>
         <code id="orderId"></code>
@@ -127,11 +128,26 @@
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
+  // 临时诊断：URL 带 ?debug=1 时把结账脚本执行状态显示在页面上（排查"点击无响应"）。
+  // 正常用户不可见——diagBox 默认 display:none，只有 debug 参数才打开。
+  var DEBUG = new URLSearchParams(location.search).get("debug") === "1";
+  var diagBox = document.getElementById("diagBox");
+  function diag(s) {
+    if (!DEBUG || !diagBox) return;
+    diagBox.style.display = "block";
+    diagBox.innerHTML += s + "<br>";
+  }
+  window.addEventListener("error", function (e) {
+    diag("JS错误: " + e.message + " (" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")");
+  });
+
   // 应用内购买：App 会把「会话码」带在 URL 上（?c=...），随订单送进 Paddle 的
   // custom_data。支付完成后 Worker 凭这个会话码查设备上报的机器码、签码投递，
   // App 正在轮询就能自动解锁 —— 用户不用抄机器码、也不用回网页领码。
   var SESSION = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
   if (!/^[0-9a-z]{6,20}$/.test(SESSION)) SESSION = "";
+  diag("会话码: " + (SESSION || "无"));
+  diag("Paddle 对象: " + (typeof Paddle));
 
   // 没有会话码 = 不是从 App 里点进来的 → 不提供结账入口。
   // 唯一购买入口是 App 内：付款后本机自动解锁。网页直购会让用户「先付钱、再摸索安装」，
@@ -139,29 +155,39 @@
   if (!SESSION) {
     document.getElementById("noSession").style.display = "block";
   } else {
-  document.getElementById("appBox").style.display = "block";
-  Paddle.Environment.set("live");
-  Paddle.Initialize({
-    token: "live_f811472d9bcdb0940c70032701b",
-    eventCallback: function (ev) {
-      if (ev.name === "checkout.completed") {
-        var m = document.getElementById("msg");
-        m.className = "ok";
-        m.textContent = SESSION
-          ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 设备会自动解锁；激活码同时发到你的邮箱。"
-          : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
-        // 订单号与邮箱回显：邮箱填错时用户仍可凭订单号在领码页自助取码
-        var d = (ev && ev.data) || {};
-        var txn = d.transaction_id || "";
-        var email = (d.customer && d.customer.email) || "";
-        if (txn) {
-          document.getElementById("orderId").textContent = txn;
-          document.getElementById("orderEmail").textContent = email || "（支付页未返回）";
-          document.getElementById("orderBox").style.display = "block";
+    document.getElementById("appBox").style.display = "block";
+    try {
+      Paddle.Environment.set("live");
+      diag("环境: " + Paddle.Environment.get());
+      Paddle.Initialize({
+        token: "live_f811472d9bcdb0940c70032701b",
+        eventCallback: function (ev) {
+          diag("Paddle事件: " + ev.name + (ev.error ? " / " + JSON.stringify(ev.error) : ""));
+          if (ev.name === "checkout.completed") {
+            var m = document.getElementById("msg");
+            m.className = "ok";
+            m.textContent = SESSION
+              ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 设备会自动解锁；激活码同时发到你的邮箱。"
+              : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
+            // 订单号与邮箱回显：邮箱填错时用户仍可凭订单号在领码页自助取码
+            var d = (ev && ev.data) || {};
+            var txn = d.transaction_id || "";
+            var email = (d.customer && d.customer.email) || "";
+            if (txn) {
+              document.getElementById("orderId").textContent = txn;
+              document.getElementById("orderEmail").textContent = email || "（支付页未返回）";
+              document.getElementById("orderBox").style.display = "block";
+            }
+          }
         }
-      }
+      });
+      diag("Initialize 完成");
+    } catch (e) {
+      diag("初始化异常: " + e.message);
+      var m0 = document.getElementById("msg");
+      m0.className = "err";
+      m0.textContent = "支付组件加载失败，请刷新重试或邮件联系 support@lumenplay.app。";
     }
-  });
   }
   function checkoutOptions() {
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
@@ -184,11 +210,20 @@
   function openCheckout() {
     if (!SESSION) return;   // 无会话码不结账（唯一入口在 App 内）
     var m = document.getElementById("msg");
+    diag("尝试拉起结账");
+    if (typeof Paddle === "undefined" || !Paddle.Checkout) {
+      diag("Paddle 未加载 —— CDN 脚本可能被拦截");
+      m.className = "err";
+      m.textContent = "支付组件未加载，请检查网络后刷新重试。";
+      return;
+    }
     try {
       Paddle.Checkout.open(checkoutOptions());
+      diag("Checkout.open 已调用");
     } catch (e) {
+      diag("结账异常: " + e.message);
       m.className = "err";
-      m.textContent = "结账暂时不可用，请稍后重试或邮件联系 support@lumenplay.app。";
+      m.textContent = "结账暂时不可用：" + e.message + "。或邮件联系 support@lumenplay.app。";
     }
   }
   // 从 App 点进来（带会话码）时直接拉起结账，少一次点击
