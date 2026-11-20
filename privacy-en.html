@@ -50,9 +50,13 @@
         passwords are encrypted with AES-GCM via the Android KeyStore and stored locally.
         They <strong>never leave the device</strong> and are excluded from system cloud backups;</li>
     <li><strong>Playback preferences</strong> (aspect-ratio memory, subtitle preferences, etc.): stored locally;</li>
-    <li><strong>Device identifier (ANDROID_ID)</strong>: used only on-device to derive a 16-digit hashed
-        "machine code" for licensing and device binding on our direct (website) channel. It contains no real
-        identity and is never shared with third parties.</li>
+    <li><strong>Device identifier (Widevine device ID / ANDROID_ID)</strong>: used only on-device to derive a
+        16-digit hashed "machine code" (first 16 hex chars of a SHA-256 digest) for licensing and device binding
+        on our direct (website) channel. The primary source is the device-unique ID from Widevine DRM
+        (permission-free; used so the machine code stays stable across factory resets), falling back to
+        ANDROID_ID when unavailable. <strong>Neither the App nor our servers store the raw identifiers — only
+        the hash</strong>. It contains no real identity, cannot be reverse-mapped to your device, and is never
+        shared with third parties.</li>
     <li><strong>Entitlement data (direct channel only)</strong>: when you use a paid feature (disc image /
         Dolby passthrough / styled subtitles), the App requests an <strong>entitlement ticket</strong> from our
         licensing server and periodically renews it while valid. To do this, the server records your
