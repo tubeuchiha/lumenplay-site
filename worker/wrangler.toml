@@ -13,7 +13,7 @@
 #   5) 验证：curl "https://lumenplay.app/api/device/poll?c=123456" 应返回
 #        {"status":"waiting"} 且 CORS 头齐全
 name = "lumenplay-device"
-main = "device-code.js"
+main = "device-code.ts"
 compatibility_date = "2026-11-01"
 
 # 部署时自动绑定路由（无需在控制台手动加）

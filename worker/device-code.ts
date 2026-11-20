@@ -38,6 +38,29 @@
  * 点提交，电视几秒内自动解锁」；极端情况下多等一会儿即可。
  */
 
+/* ───────────────────── 类型（仅编译期，不产生运行时开销） ───────────────────── */
+
+export interface Env {
+  DEVICE_KV: KVNamespace;
+  ADMIN_TOKEN: string;
+}
+
+/** c:<短码> 的会话记录；activation 存在 = 码已投递，等 TV 下一拍取走。 */
+interface SessionRecord {
+  ts?: number;
+  activation?: string;
+}
+/** d:<短码> 的发码方投递记录（TV 不在线时的兜底，TTL 7 天）。 */
+interface DeliveredRecord {
+  activation: string;
+  ts: number;
+}
+/** 请求体字段一律按 unknown 读入，再交给 String()/校验函数归一，防止伪造类型穿透。 */
+interface DeviceBody {
+  code?: unknown;
+  activation?: unknown;
+}
+
 const TTL_SECONDS = 1800;          // 短码有效期 30 分钟
 const DELIVERED_TTL_SECONDS = 604800; // 发码方投递的码保留 7 天（TV 可能过几天才开解锁卡）
 const MAX_SUBMITS_PER_HOUR = 30;   // 单 IP 每小时提交上限
@@ -48,14 +71,14 @@ const MAX_ACTIVATION_LEN = 4096;   // 激活码长度上限（正常 200~400 字
 // MACHINE_RE 随机器码绑定一起删除——本 Worker 不再关心机器码。
 const CODE_RE = /^[0-9a-z]{6,20}$/;
 
-const CORS = {
+const CORS: Record<string, string> = {
   'access-control-allow-origin': '*',
   'access-control-allow-methods': 'GET,POST,OPTIONS',
   'access-control-allow-headers': 'content-type',
   'access-control-max-age': '86400',
 };
 
-function json(body, status = 200) {
+function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
     headers: {
@@ -67,7 +90,7 @@ function json(body, status = 200) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
     if (request.method === 'OPTIONS') {
@@ -90,7 +113,7 @@ export default {
 };
 
 /** admin 令牌校验：头 x-admin-token 优先，兼容 t= 查询参数（书签直链用）。 */
-function checkAdmin(request, url, env) {
+function checkAdmin(request: Request, url: URL, env: Env): boolean {
   const expected = (env.ADMIN_TOKEN || '').trim();
   if (!expected) return false; // 未配置 = admin 通道整体关闭
   const got = (
@@ -99,7 +122,7 @@ function checkAdmin(request, url, env) {
   return got.length === expected.length && got === expected;
 }
 
-function activationShapeOk(activation) {
+function activationShapeOk(activation: string): boolean {
   if (activation.length < 20 || activation.length > MAX_ACTIVATION_LEN) return false;
   // 本工程的激活码固定是「两段 base64url + 点」；先挡掉明显不是码的内容
   return /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(activation);
@@ -108,7 +131,7 @@ function activationShapeOk(activation) {
 /**
  * 设备轮询：优先取发码方投递的码（d:），其次登记/续期会话；有码则消费返回。
  */
-async function poll(url, env) {
+async function poll(url: URL, env: Env): Promise<Response> {
   const code = (url.searchParams.get('c') || '').trim().toLowerCase();
   if (!CODE_RE.test(code)) return json({ error: 'bad_code' }, 400);
 
@@ -117,7 +140,7 @@ async function poll(url, env) {
   const delivered = await env.DEVICE_KV.get(dKey);
   if (delivered != null) {
     await env.DEVICE_KV.delete(dKey); // 一次性消费
-    return json({ status: 'ready', activation: JSON.parse(delivered).activation });
+    return json({ status: 'ready', activation: (JSON.parse(delivered) as DeliveredRecord).activation });
   }
 
   const key = `c:${code}`;
@@ -131,9 +154,9 @@ async function poll(url, env) {
     return json({ status: 'waiting' });
   }
 
-  let rec;
+  let rec: SessionRecord;
   try {
-    rec = JSON.parse(raw);
+    rec = JSON.parse(raw) as SessionRecord;
   } catch {
     rec = { ts: Date.now() };
   }
@@ -151,10 +174,10 @@ async function poll(url, env) {
 }
 
 /** 手机端提交激活码到指定短码。 */
-async function submit(request, env) {
-  let body;
+async function submit(request: Request, env: Env): Promise<Response> {
+  let body: DeviceBody;
   try {
-    body = await request.json();
+    body = (await request.json()) as DeviceBody;
   } catch {
     return json({ error: 'bad_json' }, 400);
   }
@@ -177,9 +200,9 @@ async function submit(request, env) {
   // 短码不存在 = 电视没在轮询（过期 / 页面上的短码是旧的）
   if (raw == null) return json({ error: 'code_not_live' }, 409);
 
-  let rec;
+  let rec: SessionRecord;
   try {
-    rec = JSON.parse(raw);
+    rec = JSON.parse(raw) as SessionRecord;
   } catch {
     rec = { ts: Date.now() };
   }
@@ -198,13 +221,13 @@ async function submit(request, env) {
  * - 永远写 d:<短码>（TTL 7 天），TV 哪怕几天后才打开解锁卡也能取到；
  * - TV 恰好在轮询中（c:<短码> 存在且还没有码）时同步写入，3 秒内即达。
  */
-async function adminDeliver(request, env) {
+async function adminDeliver(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
   if (!checkAdmin(request, url, env)) return json({ error: 'unauthorized' }, 403);
 
-  let body;
+  let body: DeviceBody;
   try {
-    body = await request.json();
+    body = (await request.json()) as DeviceBody;
   } catch {
     return json({ error: 'bad_json' }, 400);
   }
@@ -218,9 +241,9 @@ async function adminDeliver(request, env) {
   const raw = await env.DEVICE_KV.get(cKey);
   let live = false;
   if (raw != null) {
-    let rec;
+    let rec: SessionRecord;
     try {
-      rec = JSON.parse(raw);
+      rec = JSON.parse(raw) as SessionRecord;
     } catch {
       rec = { ts: Date.now() };
     }
@@ -242,11 +265,11 @@ async function adminDeliver(request, env) {
 }
 
 /** 发码方查投递状态：d: 是否还在等待消费（delivered=false = 电视还没取走）。 */
-async function adminStatus(request, url, env) {
+async function adminStatus(request: Request, url: URL, env: Env): Promise<Response> {
   if (!checkAdmin(request, url, env)) return json({ error: 'unauthorized' }, 403);
   const code = (url.searchParams.get('c') || '').trim().toLowerCase();
   if (!CODE_RE.test(code)) return json({ error: 'bad_code' }, 400);
   const delivered = await env.DEVICE_KV.get(`d:${code}`);
   if (delivered == null) return json({ delivered: false });
-  return json({ delivered: true, ts: JSON.parse(delivered).ts });
+  return json({ delivered: true, ts: (JSON.parse(delivered) as DeliveredRecord).ts });
 }
