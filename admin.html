@@ -7,11 +7,13 @@
 <!--
   发码方一键投递页（内部使用，勿对外分享）：
   收到用户申请邮件（机器码 + 短码）→ 本地签发激活码 → 打开本页
-  （建议书签 https://lumenplay.app/admin.html?t=<ADMIN_TOKEN>，令牌自动带入）
+  （建议书签 https://lumenplay.app/admin.html?t=<ADMIN_TOKEN> 自动填充输入框；
+    令牌只经 x-admin-token 头发送，不进接口 URL / 服务端访问日志）
   → 粘贴激活码点「投递到电视」：
     - 用户电视正开着解锁框 → 通常 1 分钟内自动解锁（KV 传播延迟 + 下一拍轮询取走）；
     - 用户还没开解锁框 → 码保留 7 天，期间任何时候打开解锁框即自动解锁。
-  鉴权走 Worker secret ADMIN_TOKEN（x-admin-token 头），本页不存储任何码。
+  鉴权走 Worker secret ADMIN_TOKEN（**只认 x-admin-token 头**，>= 32 字符、
+  常量时间比较；不再接受 ?t= 查询参数），本页不存储任何码。
 -->
 <style>
   :root {
@@ -60,7 +62,7 @@
   </div>
 
   <div class="card">
-    <div class="label">ADMIN_TOKEN（书签带 ?t= 时自动填充）</div>
+    <div class="label">ADMIN_TOKEN（书签带 ?t= 时自动填入本页，仅本地填充）</div>
     <input id="token" type="password" placeholder="Worker secret ADMIN_TOKEN">
   </div>
 
@@ -70,7 +72,7 @@
     <span id="msg"></span>
   </div>
 
-  <p class="tip" id="hint">建议书签 https://lumenplay.app/admin.html?t=&lt;令牌&gt;，以后打开短码/令牌自动带入，只需粘贴激活码。投递成功后：电视正开解锁框 → 几秒内自动解锁；没开 → 码保留 7 天，期间打开即解锁。</p>
+  <p class="tip" id="hint">建议书签 https://lumenplay.app/admin.html?t=&lt;令牌&gt;，以后打开短码/令牌自动带入（仅填入本页输入框，不进接口 URL），只需粘贴激活码。投递成功后：电视正开解锁框 → 几秒内自动解锁；没开 → 码保留 7 天，期间打开即解锁。</p>
 </div>
 
 <script>
@@ -131,7 +133,9 @@
     var f = readForm();
     if (!/^\d{6}$/.test(f.code)) { show(ERR.bad_code, true); return; }
     if (!f.token) { show(ERR.unauthorized, true); return; }
-    call('/api/device/admin-status?c=' + f.code + '&t=' + encodeURIComponent(f.token), {})
+    call('/api/device/admin-status?c=' + f.code, {
+      headers: { 'x-admin-token': f.token }
+    })
       .then(function (ret) {
         if (!ret.ok) { show(ERR[ret.j.error] || ('查询失败（HTTP ' + ret.status + '）'), true); return; }
         show(ret.j.delivered ? '已投递、等待电视取走（未消费）' : '没有待取的码（未投递或已被电视消费）', false);

@@ -14,12 +14,14 @@
  *
  * 发码方一键投递（admin 通道）：发码方在回邮件时打开
  *   https://lumenplay.app/admin.html?c=<短码>&t=<ADMIN_TOKEN>
+ *   （?t= 只用于管理页本地自动填充输入框，令牌一律经 x-admin-token 头发送，
+ *    绝不进接口 URL —— 否则会泄进 Worker 访问日志 / 浏览器历史 / Referer）
  * 粘贴激活码点投递 → POST /api/device/admin-deliver。与 submit 的区别：
  *   - 不要求 TV 正在轮询（用户可能还没打开解锁卡），码存到独立的
  *     d:<短码> key（TTL 7 天），TV 下一次 poll（哪怕几天后）取到即消费；
  *   - TV 若恰好在轮询中，同时写入 c:<短码>，下一拍（3 秒内）立即解锁；
- *   - 鉴权走 ADMIN_TOKEN secret（x-admin-token 头或 t= 查询参数），
- *     不限速（令牌私有）。
+ *   - 鉴权走 ADMIN_TOKEN secret（**只认 x-admin-token 头**，>= 32 字符、
+ *     常量时间比较）；不限速（令牌私有）。
  *
  * 会话码 → 机器码绑定：已迁出（2026-11-16）。应用内购买改由 license worker 的
  * `/pay/poll` + D1 强一致存储承担（KV 的边缘缓存会让设备付款后干等 40-60 秒），
@@ -112,14 +114,31 @@ export default {
   },
 };
 
-/** admin 令牌校验：头 x-admin-token 优先，兼容 t= 查询参数（书签直链用）。 */
-function checkAdmin(request: Request, url: URL, env: Env): boolean {
+/** ADMIN_TOKEN 最低长度：弱口令直接关闭 admin 通道，逼运维轮换（与主 Worker 同口径）。 */
+const ADMIN_TOKEN_MIN_LEN = 32;
+
+/** 常量时间字符串比较，避免逐字节提前退出泄露 token 前缀。 */
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/**
+ * admin 令牌校验：**只认 x-admin-token 头**。
+ * 旧版还兼容 ?t= 查询参数（书签直链），会把令牌泄进 Worker 访问日志、
+ * 浏览器历史与 Referer，2026-11-20 安全加固时移除。管理页仍可用
+ * ?t= 自动填充输入框，但请求一律走 header。
+ * 未配置 / 弱口令（< 32 字符）= admin 通道整体关闭。
+ */
+function checkAdmin(request: Request, env: Env): boolean {
   const expected = (env.ADMIN_TOKEN || '').trim();
-  if (!expected) return false; // 未配置 = admin 通道整体关闭
-  const got = (
-    request.headers.get('x-admin-token') || url.searchParams.get('t') || ''
-  ).trim();
-  return got.length === expected.length && got === expected;
+  if (expected.length < ADMIN_TOKEN_MIN_LEN) {
+    console.error('[Admin] ADMIN_TOKEN weak/missing: rotate via wrangler secret put (>=32 chars)');
+    return false;
+  }
+  return timingSafeEqual((request.headers.get('x-admin-token') || '').trim(), expected);
 }
 
 function activationShapeOk(activation: string): boolean {
@@ -222,8 +241,7 @@ async function submit(request: Request, env: Env): Promise<Response> {
  * - TV 恰好在轮询中（c:<短码> 存在且还没有码）时同步写入，3 秒内即达。
  */
 async function adminDeliver(request: Request, env: Env): Promise<Response> {
-  const url = new URL(request.url);
-  if (!checkAdmin(request, url, env)) return json({ error: 'unauthorized' }, 403);
+  if (!checkAdmin(request, env)) return json({ error: 'unauthorized' }, 403);
 
   let body: DeviceBody;
   try {
@@ -266,7 +284,7 @@ async function adminDeliver(request: Request, env: Env): Promise<Response> {
 
 /** 发码方查投递状态：d: 是否还在等待消费（delivered=false = 电视还没取走）。 */
 async function adminStatus(request: Request, url: URL, env: Env): Promise<Response> {
-  if (!checkAdmin(request, url, env)) return json({ error: 'unauthorized' }, 403);
+  if (!checkAdmin(request, env)) return json({ error: 'unauthorized' }, 403);
   const code = (url.searchParams.get('c') || '').trim().toLowerCase();
   if (!CODE_RE.test(code)) return json({ error: 'bad_code' }, 400);
   const delivered = await env.DEVICE_KV.get(`d:${code}`);
