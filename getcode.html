@@ -47,8 +47,8 @@
   <p class="meta">输入订单号与设备机器码，激活码立即生成并发到你的购买邮箱。激活时只需复制激活码粘贴进 App；机器码仅用于区分设备。</p>
 
   <div class="card">
-    <label>订单号（购买确认邮件里的 txn_01 开头字符串）</label>
-    <input id="orderId" placeholder="txn_01..." autocomplete="off">
+    <label>订单号（购买确认邮件中的完整订单号，形如 txn_01…）</label>
+    <input id="orderId" placeholder="例如 txn_01..." autocomplete="off">
 
     <label>机器码 ①（App：播放设置 → 解锁完整版，16 位）</label>
     <input id="m1" maxlength="16" placeholder="0123456789abcdef" autocomplete="off">
@@ -92,8 +92,10 @@ async function getCodes() {
     .filter(Boolean);
 
   msg.className = ""; msg.textContent = ""; box.innerHTML = "";
-  if (!/^txn_01[a-z0-9]+$/i.test(orderId)) {
-    msg.className = "err"; msg.textContent = "订单号格式不正确：应为 txn_01 开头的完整字符串（见购买确认邮件）。"; return;
+  // 只做形状兜底，不校验 Paddle 的 ID 格式（前缀/长度属其内部实现，写死会在
+  // 对方改格式时把正版买家挡在门外；权威判定在服务端 licenses 精确匹配）
+  if (!/^[A-Za-z0-9_.:-]{4,128}$/.test(orderId)) {
+    msg.className = "err"; msg.textContent = "订单号格式不正确：请粘贴购买确认邮件中的完整订单号。"; return;
   }
   if (machines.length === 0) {
     msg.className = "err"; msg.textContent = "请至少填写一个机器码（App 解锁对话框里复制）。"; return;

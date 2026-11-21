@@ -46,8 +46,8 @@
   <p class="meta">Enter your order ID and device machine codes — codes are generated instantly and emailed to you. Only the activation code needs to be pasted into the app; machine codes are just labels for telling devices apart.</p>
 
   <div class="card">
-    <label>Order ID (starts with txn_01, see your purchase confirmation email)</label>
-    <input id="orderId" placeholder="txn_01..." autocomplete="off">
+    <label>Order ID (full order ID from your purchase confirmation email, e.g. txn_01…)</label>
+    <input id="orderId" placeholder="e.g. txn_01..." autocomplete="off">
 
     <label>Machine code ① (App: Playback settings → Unlock full version, 16 hex chars)</label>
     <input id="m1" maxlength="16" placeholder="0123456789abcdef" autocomplete="off">
@@ -89,8 +89,10 @@ async function getCodes() {
     .filter(Boolean);
 
   msg.className = ""; msg.textContent = ""; box.innerHTML = "";
-  if (!/^txn_01[a-z0-9]+$/i.test(orderId)) {
-    msg.className = "err"; msg.textContent = "Invalid order ID: it should start with txn_01 (see your purchase confirmation email)."; return;
+  // Shape check only — do not encode Paddle's ID format (its prefix/length is an
+  // internal detail; hard-coding it blocks real buyers when Paddle changes it)
+  if (!/^[A-Za-z0-9_.:-]{4,128}$/.test(orderId)) {
+    msg.className = "err"; msg.textContent = "Invalid order ID: paste the full order ID from your purchase confirmation email."; return;
   }
   if (machines.length === 0) {
     msg.className = "err"; msg.textContent = "Enter at least one machine code (copy it from the app's unlock dialog)."; return;
