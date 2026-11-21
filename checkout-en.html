@@ -63,14 +63,14 @@
   <div class="card" id="noSession" style="text-align:center;padding:36px 24px">
     <h2 style="margin-top:0">Buy inside the app</h2>
     <p>Purchasing happens in the app: open <strong>Playback settings → Unlock full version</strong> and tap
-      <strong>Buy now</strong>. After payment <strong>that device unlocks by itself</strong> — no machine code to enter.</p>
+      <strong>Buy now</strong>. After payment <strong>that device unlocks by itself</strong> — nothing to enter.</p>
     <p style="margin:20px 0 8px">
       <a class="buy-btn" href="https://github.com/tubeuchiha/lumenplay-site/releases/latest/download/LumenPlay.apk" style="text-decoration:none">Download LumenPlay</a>
     </p>
     <p class="tip">Phone: buy in the app, the device unlocks automatically once payment completes.<br>
       TV / TV box: tap "Buy now" on the TV, scan the QR code with your phone to pay — the TV unlocks automatically.</p>
-    <p class="tip" style="margin-top:16px">Already paid and need codes for another device? Use your
-      <strong>order ID + machine code</strong> on the <a href="getcode-en.html">code page</a>.</p>
+    <p class="tip" style="margin-top:16px">Already bought and need another device unlocked? On the unlocked device,
+      open the app and tap <strong>Scan to activate another device</strong>, then scan the QR code on that device.</p>
   </div>
 
   <div class="card" id="appBox" style="text-align:center;padding:32px 24px">
@@ -78,20 +78,18 @@
     <div id="msg"></div>
     <div id="diagBox" style="display:none;margin-top:14px;padding:10px 12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);text-align:left;word-break:break-all;line-height:1.7"></div>
     <div id="orderBox" class="card">
-      <p style="margin-bottom:6px"><strong>Order ID</strong>
-        <code id="orderId"></code>
-        <button onclick="copyOrder()" id="copyBtn">Copy</button></p>
-      <p class="tip">Codes were sent to <strong id="orderEmail"></strong>.
-        Didn't get them? Use your <strong>order ID + machine code</strong> on the
-        <a href="getcode-en.html">code page</a> to retrieve them yourself — no email needed.</p>
+      <p><strong>Payment complete — please return to LumenPlay.</strong> The device you paid on unlocks automatically
+        (a short wait is possible on slow networks).</p>
+      <p class="tip">Need another device unlocked? On the unlocked device, open the app and tap
+        <strong>Scan to activate another device</strong>, then scan the QR code on that device.</p>
       <p class="tip">Thank you for supporting LumenPlay. One charge on your card or bank statement will appear as
         <strong>PADDLE.NET* LUMENPLAY</strong> — that's your record of buying LumenPlay through Paddle.
         If you don't recognize it, please don't file a chargeback; if you need anything,
         <a href="mailto:support@lumenplay.app">contact us by email</a>.</p>
     </div>
     <p class="tip" style="margin-top:14px;color:var(--accent)"><strong>Before you buy:</strong> we recommend trying the
-    7-day free trial first. Once activated, a code is bound to your device and delivery is complete —
-    <strong>activated licences are non-refundable</strong>; only unactivated codes can be refunded within 14 days.
+    7-day free trial first. Once activated, the licence is bound to your device and delivery is complete —
+    <strong>activated licences are non-refundable</strong>; only unactivated licences can be refunded within 14 days.
     If you need a refund, please <a href="mailto:support@lumenplay.app">contact us</a> first rather than opening a
     dispute with your payment provider.</p>
     <p class="tip" style="margin-top:10px">Alipay / WeChat Pay (China) · PayPal / Cards / Apple Pay (worldwide)<br>
@@ -108,20 +106,21 @@
     </tr>
     <tr>
       <td>② That device unlocks</td>
-      <td>The device you paid on <strong>unlocks automatically</strong> — just go back to the app, no code to copy (a short wait is possible on slow networks).
-        <span class="tip">The activation code is also emailed to you as a long-term backup.</span></td>
+      <td>The device you paid on <strong>unlocks automatically</strong> — just go back to the app (a short wait is possible on slow networks).
+        <span class="tip">No email is sent. The entitlement lives on the server, so reinstalling restores it automatically.</span></td>
     </tr>
     <tr>
-      <td>③ Codes for other devices</td>
-      <td>For your TV or other devices: copy that device's <strong>16-character machine code</strong> in the app, then use your
-        <strong>order ID</strong> on the <a href="getcode-en.html">code page</a> (maximum 3 devices per order).
-        <span class="tip">Reinstalling keeps the same machine code, so the original code still works; for a factory reset or new device, contact support with your order ID to release the old device first.</span></td>
+      <td>③ Activate other devices</td>
+      <td>For your TV or other devices: on the <strong>unlocked</strong> device, open the app and tap
+        <strong>Scan to activate another device</strong>, then scan the QR code shown on that device. It unlocks within
+        seconds (up to 3 devices per purchase, including this one).
+        <span class="tip">Replacing a device? Support can release the old device's slot.</span></td>
     </tr>
   </table>
 
   <h2>Before you buy</h2>
   <ul>
-    <li><strong>Check device support first</strong>: bitstream passthrough requires both the device and AV receiver to support Dolby / DTS. A free 7-day trial (starting from first use of a paid capability) is available in the app — <strong>try before you buy</strong>.</li>
+    <li><strong>Check device support first</strong>: bitstream passthrough requires both the device and AV receiver to support Dolby / DTS. A free 7-day trial (starting on first launch) is available in the app — <strong>try before you buy</strong>.</li>
     <li>Full price details: <a href="pricing-en.html">pricing page</a>; refunds: <a href="refund-en.html">refund policy</a>; terms: <a href="terms-en.html">terms of service</a>.</li>
     <li>Questions: <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>.</li>
   </ul>
@@ -186,19 +185,9 @@
       if (ev.name === "checkout.completed") {
         var m = document.getElementById("msg");
         m.className = "ok";
-        m.textContent = SESSION
-          ? "✅ Payment received! Your licence is being sent to your device — go back to LumenPlay and it will unlock automatically. The code is also emailed to you."
-          : "✅ Payment received! Activation codes are on their way to your email — please check your inbox and spam folder.";
-        // Show order ID + email: if the email was mistyped, the order ID still lets
-        // the buyer retrieve codes from the code page.
-        var d = (ev && ev.data) || {};
-        var txn = d.transaction_id || "";
-        var email = (d.customer && d.customer.email) || "";
-        if (txn) {
-          document.getElementById("orderId").textContent = txn;
-          document.getElementById("orderEmail").textContent = email || "(not returned)";
-          document.getElementById("orderBox").style.display = "block";
-        }
+        m.textContent = "✅ Payment received! Please return to LumenPlay — the device unlocks automatically.";
+        // No order details are echoed: the buyer needs nothing else to finish (#190).
+        document.getElementById("orderBox").style.display = "block";
       }
     }
   });
@@ -214,19 +203,6 @@
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
     if (SESSION) opts.customData = { c: SESSION };
     return opts;
-  }
-  function copyOrder() {
-    var txn = document.getElementById("orderId").textContent;
-    var btn = document.getElementById("copyBtn");
-    var done = function () { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy"; }, 1500); };
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(txn).then(done, done);
-    } else {
-      var r = document.createRange(); r.selectNode(document.getElementById("orderId"));
-      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
-      try { document.execCommand("copy"); } catch (e) {}
-      done();
-    }
   }
   function openCheckout() {
     if (!SESSION) return;   // no session code: the only entry point is inside the app

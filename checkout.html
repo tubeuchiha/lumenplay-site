@@ -64,14 +64,14 @@
   <div class="card" id="noSession" style="text-align:center;padding:36px 24px">
     <h2 style="margin-top:0">请在 App 内购买</h2>
     <p>LumenPlay 的购买入口在 App 内：装好 App，进入<strong>播放设置 → 解锁完整版</strong>，
-      点「立即购买 ¥105」，付款后<strong>这台设备自动解锁</strong>，不需要填写机器码。</p>
+      点「立即购买 ¥105」，付款后<strong>这台设备自动解锁</strong>，不需要填写任何号码。</p>
     <p style="margin:20px 0 8px">
       <a class="buy-btn" href="https://github.com/tubeuchiha/lumenplay-site/releases/latest/download/LumenPlay.apk" style="text-decoration:none">下载 LumenPlay</a>
     </p>
     <p class="tip">手机：App 内购买，本机付款后自动解锁。<br>
       TV / 电视盒：在电视上点「立即购买」，用手机扫码付款，电视自动解锁。</p>
-    <p class="tip" style="margin-top:16px">已经付过款、要为其他设备领码？凭<strong>订单号 + 机器码</strong>去
-      <a href="getcode.html">领码页</a>自助取码。</p>
+    <p class="tip" style="margin-top:16px">已经买过、要给其他设备解锁？在已解锁的设备上打开 App，
+      点「扫码激活其他设备」，扫那台设备屏幕上的二维码即可。</p>
   </div>
 
   <div class="card" id="appBox" style="text-align:center;padding:32px 24px">
@@ -79,19 +79,15 @@
     <div id="msg"></div>
     <div id="diagBox" style="display:none;margin-top:14px;padding:10px 12px;background:#0d1117;border:1px solid var(--border);border-radius:8px;font-size:12px;color:var(--muted);text-align:left;word-break:break-all;line-height:1.7"></div>
     <div id="orderBox" class="card">
-      <p style="margin-bottom:6px"><strong>订单号</strong>
-        <code id="orderId"></code>
-        <button onclick="copyOrder()" id="copyBtn">复制</button></p>
-      <p class="tip">激活码已发往 <strong id="orderEmail"></strong>。
-        没收到？凭<strong>订单号 + 机器码</strong>到<a href="getcode.html">领码页</a>可自助取码
-        （不依赖邮箱，邮箱填错也能补救）。</p>
+      <p><strong>付款已完成，请返回 LumenPlay。</strong>正在付款的这台设备会自动解锁（网络较慢时稍等片刻）。</p>
+      <p class="tip">要给其他设备解锁？在已解锁的设备上打开 App，点「扫码激活其他设备」，扫那台设备屏幕上的二维码即可。</p>
       <p class="tip">感谢您支持 LumenPlay，您的消费账单中有一条会显示 <strong>PADDLE.NET* LUMENPLAY</strong>，
         这是您通过 Paddle 购买了 LumenPlay 的依据。如果您忘记了这件事，请勿因此发起拒付，
         如有需要，建议您<a href="mailto:support@lumenplay.app">通过邮件联系我们</a>。</p>
     </div>
     <p class="tip" style="margin-top:14px;color:var(--accent)"><strong>购买前请知悉：</strong>建议先用 7 天免费试用再决定是否购买。
-    激活码一经激活即绑定设备、完成交付，<strong>已激活的授权不支持退款</strong>；
-    未激活的激活码才可在 14 天内申请全额退款。需要退款请先<a href="mailto:support@lumenplay.app">联系我们</a>，勿直接向支付平台发起争议。</p>
+    授权一经激活即绑定设备、完成交付，<strong>已激活的授权不支持退款</strong>；
+    未激活的授权才可在 14 天内申请全额退款。需要退款请先<a href="mailto:support@lumenplay.app">联系我们</a>，勿直接向支付平台发起争议。</p>
     <p class="tip" style="margin-top:10px">支持支付宝 / 微信支付（中国）· PayPal / 银行卡 / Apple Pay（海外）<br>
     支付页由 Paddle 加密处理，我们不接触你的银行卡信息。完整规则见<a href="refund.html">退款政策</a>。</p>
   </div>
@@ -105,20 +101,20 @@
     </tr>
     <tr>
       <td>② 这台设备自动解锁</td>
-      <td>付款成功后，正在付款的设备<strong>自动解锁</strong>——回到 App 即可，不用抄激活码（若网络较慢可能需稍等）。
-        <span class="tip">激活码同时发到你的付款邮箱做长期备份。</span></td>
+      <td>付款成功后，正在付款的设备<strong>自动解锁</strong>——回到 App 即可（若网络较慢可能需稍等）。
+        <span class="tip">不发任何邮件；授权记录在服务端，重装后打开 App 会自动恢复。</span></td>
     </tr>
     <tr>
-      <td>③ 其余设备领码</td>
-      <td>电视等其他设备：在 App 里取该设备 <strong>16 位机器码</strong>，用<strong>订单号</strong>到
-        <a href="getcode.html">领码页</a>自助领码（一单最多 3 台设备）。
-        <span class="tip">重装系统机器码不变，原码可复用；恢复出厂或换机凭订单号联系客服处理旧设备后重签。</span></td>
+      <td>③ 激活其他设备</td>
+      <td>电视等其他设备：在<strong>已解锁的设备</strong>上打开 App，点「扫码激活其他设备」，
+        扫那台设备屏幕上的二维码，几秒后它自动解锁（一单最多 3 台，含本机）。
+        <span class="tip">换机时旧设备名额由客服协助释放。</span></td>
     </tr>
   </table>
 
   <h2>购买前建议确认</h2>
   <ul>
-    <li>你的设备<strong>硬件支持情况</strong>：原码直通需设备与功放同时支持（杜比 / DTS）；App 内有免费试用（7 天，从首次使用付费能力起算），<strong>建议先试用再购买</strong>。</li>
+    <li>你的设备<strong>硬件支持情况</strong>：原码直通需设备与功放同时支持（杜比 / DTS）；App 内有免费试用（7 天，从首次启动起算），<strong>建议先试用再购买</strong>。</li>
     <li>完整价格说明见<a href="pricing.html">定价页</a>；退款规则见<a href="refund.html">退款政策</a>；条款见<a href="terms.html">服务条款</a>。</li>
     <li>如有疑问：<a href="mailto:support@lumenplay.app">support@lumenplay.app</a>。</li>
   </ul>
@@ -156,9 +152,8 @@
     };
   }
 
-  // 应用内购买：App 会把「会话码」带在 URL 上（?c=...），随订单送进 Paddle 的
-  // custom_data。支付完成后 Worker 凭这个会话码查设备上报的机器码、签码投递，
-  // App 正在轮询就能自动解锁 —— 用户不用抄机器码、也不用回网页领码。
+  // 应用内购买：App 把一次性会话码带在 URL 上（?c=...），随订单送进 Paddle 的
+  // custom_data。支付完成后服务端据此把授权投递到正在等待的设备，App 轮询自动解锁。
   var SESSION = (new URLSearchParams(location.search).get("c") || "").trim().toLowerCase();
   if (!/^[0-9a-z]{6,20}$/.test(SESSION)) SESSION = "";
   diag("会话码: " + (SESSION || "无"));
@@ -183,18 +178,9 @@
           if (ev.name === "checkout.completed") {
             var m = document.getElementById("msg");
             m.className = "ok";
-            m.textContent = SESSION
-              ? "✅ 付款成功！正在把激活码发送到你的设备，请返回 LumenPlay —— 设备会自动解锁；激活码同时发到你的邮箱。"
-              : "✅ 付款成功！激活码正在发送到你的邮箱，请留意收件箱与垃圾邮件。";
-            // 订单号与邮箱回显：邮箱填错时用户仍可凭订单号在领码页自助取码
-            var d = (ev && ev.data) || {};
-            var txn = d.transaction_id || "";
-            var email = (d.customer && d.customer.email) || "";
-            if (txn) {
-              document.getElementById("orderId").textContent = txn;
-              document.getElementById("orderEmail").textContent = email || "（支付页未返回）";
-              document.getElementById("orderBox").style.display = "block";
-            }
+            m.textContent = "✅ 付款成功！请返回 LumenPlay —— 正在付款的设备会自动解锁。";
+            // 不回显任何订单信息：用户不需要它做任何事，凭据也不进入浏览器（#190）
+            document.getElementById("orderBox").style.display = "block";
           }
         }
       });
@@ -210,19 +196,6 @@
     var opts = { items: [{ priceId: "pri_01m7gacrvmdexqvax20nr74sm0", quantity: 1 }] };
     if (SESSION) opts.customData = { c: SESSION };
     return opts;
-  }
-  function copyOrder() {
-    var txn = document.getElementById("orderId").textContent;
-    var btn = document.getElementById("copyBtn");
-    var done = function () { btn.textContent = "已复制"; setTimeout(function () { btn.textContent = "复制"; }, 1500); };
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(txn).then(done, done);
-    } else {
-      var r = document.createRange(); r.selectNode(document.getElementById("orderId"));
-      window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
-      try { document.execCommand("copy"); } catch (e) {}
-      done();
-    }
   }
   function openCheckout() {
     if (!SESSION) return;   // 无会话码不结账（唯一入口在 App 内）

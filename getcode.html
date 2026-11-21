@@ -2,136 +2,33 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>获取激活码 — LumenPlay（流明）</title>
-<link rel="alternate" hreflang="en" href="getcode-en.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>激活请在 App 内完成 · LumenPlay</title>
 <style>
-  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
-          --muted:#8b949e; --accent:#e8b93c; }
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#e8b93c; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text);
-         font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif; line-height:1.8; }
-  .wrap { max-width:680px; margin:0 auto; padding:48px 24px 80px; }
-  h1 { font-size:28px; margin-bottom:6px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  h2 { font-size:18px; margin:26px 0 10px; color:var(--accent); }
-  p, li { font-size:15px; }
-  ol { padding-left:22px; margin:8px 0; }
-  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
-          padding:20px 24px; margin:16px 0; }
-  label { display:block; font-size:14px; color:var(--muted); margin:14px 0 6px; }
-  input { width:100%; background:#0d1117; border:1px solid var(--border); border-radius:8px;
-          color:var(--text); padding:12px 14px; font-size:16px; font-family:ui-monospace,monospace; }
-  input:focus { outline:none; border-color:var(--accent); }
-  button { background:var(--accent); color:#0d1117; font-size:16px; font-weight:700;
-           padding:12px 32px; border:none; border-radius:8px; cursor:pointer; margin-top:18px; }
-  button:hover { filter:brightness(1.08); }
-  button[disabled] { opacity:.5; cursor:wait; }
-  .codebox { margin-top:16px; }
-  .codeitem { background:#0d1117; border:1px solid var(--border); border-radius:8px;
-              padding:12px 14px; margin:10px 0; word-break:break-all;
-              font-family:ui-monospace,monospace; font-size:14px; }
-  .codeitem b { color:var(--muted); font-size:12px; font-family:inherit; }
-  #msg { margin-top:14px; font-size:14px; }
-  #msg.ok { color:#3fb950; } #msg.err { color:#f85149; }
-  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
-  footer { margin-top:48px; text-align:center; font-size:13px; color:var(--muted); }
+  body { background:var(--bg); color:var(--text); font-family:"PingFang SC","Microsoft YaHei",-apple-system,sans-serif;
+         line-height:1.8; display:flex; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .card { max-width:520px; background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:32px 28px; }
+  h1 { font-size:22px; margin-bottom:12px; }
+  p { color:var(--muted); font-size:15px; margin-bottom:12px; }
+  ol { margin:0 0 16px 20px; color:var(--text); font-size:15px; }
+  li { margin-bottom:6px; }
   a { color:var(--accent); }
-  .tip { color:var(--muted); font-size:13px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="lang"><a href="getcode-en.html">English</a></div>
-  <h1>获取激活码</h1>
-  <p class="meta">输入订单号与设备机器码，激活码立即生成并发到你的购买邮箱。激活时只需复制激活码粘贴进 App；机器码仅用于区分设备。</p>
-
-  <div class="card">
-    <label>订单号（购买确认邮件中的完整订单号，形如 txn_01…）</label>
-    <input id="orderId" placeholder="例如 txn_01..." autocomplete="off">
-
-    <label>机器码 ①（App：播放设置 → 解锁完整版，16 位）</label>
-    <input id="m1" maxlength="16" placeholder="0123456789abcdef" autocomplete="off">
-    <label>机器码 ②（第二台设备，可选）</label>
-    <input id="m2" maxlength="16" placeholder="（选填）" autocomplete="off">
-    <label>机器码 ③（第三台设备，可选）</label>
-    <input id="m3" maxlength="16" placeholder="（选填）" autocomplete="off">
-
-    <button id="goBtn" onclick="getCodes()">获取激活码</button>
-    <div id="msg"></div>
-    <div class="codebox" id="codes"></div>
-  </div>
-
-  <h2>说明</h2>
+<div class="card">
+  <h1>激活已改为在 App 内完成</h1>
+  <p>不需要网页，不需要订单号，也不需要复制或粘贴任何号码。</p>
   <ol>
-    <li>每台设备一枚激活码，与机器码一一对应；在 App「播放设置 → 解锁完整版」粘贴对应激活码即完成解锁。</li>
-    <li>一单最多激活 <strong>3 台设备</strong>；同一机器码重复请求会原码重发，不占用补发额度。</li>
-    <li>如需换机（旧设备不再使用），凭<strong>原订单号</strong>联系 support@lumenplay.app 处理旧设备后即可在本页用<strong>原订单号 + 新机器码</strong>领取；一单一共最多 3 台设备，已满时请先联系客服。</li>
-    <li>激活码同时会发送到你的购买邮箱，请长期保存。<a href="refund.html">退款政策</a> · <a href="terms.html">服务条款</a>。</li>
+    <li>在<strong>已经解锁</strong>的手机或平板上打开 LumenPlay；</li>
+    <li>进入「播放设置 → 付费功能」，点「扫码激活其他设备」；</li>
+    <li>扫一下要激活的设备屏幕上显示的二维码，几秒后那台设备自动解锁。</li>
   </ol>
-
-  <footer>
-    <a href="index.html">← 返回 LumenPlay 官网</a> ·
-    <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>
-  </footer>
+  <p>在<strong>要激活的这台设备</strong>上，解锁窗口里也会显示二维码和数字短码，照着上一步扫即可。</p>
+  <p><a href="index.html">返回 LumenPlay 官网</a> · 需要帮助：<a href="mailto:support@lumenplay.app">support@lumenplay.app</a></p>
 </div>
-
-<script>
-// Worker 部署后把完整 URL 填到这里
-const WORKER_URL = "https://lumenplay.app/pay/issue";
-
-function validMachine(v) { return /^[0-9a-f]{16}$/.test(v.trim().toLowerCase()); }
-
-async function getCodes() {
-  const msg = document.getElementById("msg");
-  const box = document.getElementById("codes");
-  const btn = document.getElementById("goBtn");
-  const orderId = document.getElementById("orderId").value.trim();
-  const machines = ["m1", "m2", "m3"]
-    .map((id) => document.getElementById(id).value.trim().toLowerCase())
-    .filter(Boolean);
-
-  msg.className = ""; msg.textContent = ""; box.innerHTML = "";
-  // 只做形状兜底，不校验 Paddle 的 ID 格式（前缀/长度属其内部实现，写死会在
-  // 对方改格式时把正版买家挡在门外；权威判定在服务端 licenses 精确匹配）
-  if (!/^[A-Za-z0-9_.:-]{4,128}$/.test(orderId)) {
-    msg.className = "err"; msg.textContent = "订单号格式不正确：请粘贴购买确认邮件中的完整订单号。"; return;
-  }
-  if (machines.length === 0) {
-    msg.className = "err"; msg.textContent = "请至少填写一个机器码（App 解锁对话框里复制）。"; return;
-  }
-  for (const mch of machines) {
-    if (!validMachine(mch)) {
-      msg.className = "err"; msg.textContent = "机器码必须是 16 位十六进制字符（0-9 a-f）：`" + mch + "`"; return;
-    }
-  }
-
-  btn.disabled = true;
-  try {
-    const r = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ order_id: orderId, machines }),
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      msg.className = "err"; msg.textContent = data.error || "获取失败，请稍后重试或邮件联系 support@lumenplay.app。";
-      return;
-    }
-    msg.className = "ok";
-    msg.textContent = "✅ 激活码已生成" + (data.emailed_to ? "，并已发送到你的邮箱（" + data.emailed_to + "）" : "") + "。";
-    for (const c of data.codes) {
-      const div = document.createElement("div");
-      div.className = "codeitem";
-      div.innerHTML = "机器码：" + c.machine + "<br>激活码：" + c.code;
-      box.appendChild(div);
-    }
-  } catch (e) {
-    msg.className = "err"; msg.textContent = "网络错误，请稍后重试；或邮件联系 support@lumenplay.app。";
-  } finally {
-    btn.disabled = false;
-  }
-}
-</script>
 </body>
 </html>

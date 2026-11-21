@@ -2,133 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Get activation codes — LumenPlay</title>
-<link rel="alternate" hreflang="zh-CN" href="getcode.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Activate inside the app · LumenPlay</title>
 <style>
-  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3;
-          --muted:#8b949e; --accent:#e8b93c; }
+  :root { --bg:#0d1117; --panel:#161b22; --border:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#e8b93c; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text);
-         font-family:-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.7; }
-  .wrap { max-width:680px; margin:0 auto; padding:48px 24px 80px; }
-  h1 { font-size:28px; margin-bottom:6px; }
-  .meta { color:var(--muted); font-size:14px; margin-bottom:28px; }
-  h2 { font-size:18px; margin:26px 0 10px; color:var(--accent); }
-  p, li { font-size:15px; }
-  ol { padding-left:22px; margin:8px 0; }
-  .card { background:var(--panel); border:1px solid var(--border); border-radius:10px;
-          padding:20px 24px; margin:16px 0; }
-  label { display:block; font-size:14px; color:var(--muted); margin:14px 0 6px; }
-  input { width:100%; background:#0d1117; border:1px solid var(--border); border-radius:8px;
-          color:var(--text); padding:12px 14px; font-size:16px; font-family:ui-monospace,monospace; }
-  input:focus { outline:none; border-color:var(--accent); }
-  button { background:var(--accent); color:#0d1117; font-size:16px; font-weight:700;
-           padding:12px 32px; border:none; border-radius:8px; cursor:pointer; margin-top:18px; }
-  button:hover { filter:brightness(1.08); }
-  button[disabled] { opacity:.5; cursor:wait; }
-  .codebox { margin-top:16px; }
-  .codeitem { background:#0d1117; border:1px solid var(--border); border-radius:8px;
-              padding:12px 14px; margin:10px 0; word-break:break-all;
-              font-family:ui-monospace,monospace; font-size:14px; }
-  .codeitem b { color:var(--muted); font-size:12px; font-family:inherit; }
-  #msg { margin-top:14px; font-size:14px; }
-  #msg.ok { color:#3fb950; } #msg.err { color:#f85149; }
-  .lang { text-align:right; font-size:14px; margin-bottom:8px; }
-  footer { margin-top:48px; text-align:center; font-size:13px; color:var(--muted); }
+  body { background:var(--bg); color:var(--text); font-family:-apple-system,Segoe UI,Roboto,sans-serif;
+         line-height:1.8; display:flex; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .card { max-width:520px; background:var(--panel); border:1px solid var(--border); border-radius:16px; padding:32px 28px; }
+  h1 { font-size:22px; margin-bottom:12px; }
+  p { color:var(--muted); font-size:15px; margin-bottom:12px; }
+  ol { margin:0 0 16px 20px; color:var(--text); font-size:15px; }
+  li { margin-bottom:6px; }
   a { color:var(--accent); }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="lang"><a href="getcode.html">中文</a></div>
-  <h1>Get activation codes</h1>
-  <p class="meta">Enter your order ID and device machine codes — codes are generated instantly and emailed to you. Only the activation code needs to be pasted into the app; machine codes are just labels for telling devices apart.</p>
-
-  <div class="card">
-    <label>Order ID (full order ID from your purchase confirmation email, e.g. txn_01…)</label>
-    <input id="orderId" placeholder="e.g. txn_01..." autocomplete="off">
-
-    <label>Machine code ① (App: Playback settings → Unlock full version, 16 hex chars)</label>
-    <input id="m1" maxlength="16" placeholder="0123456789abcdef" autocomplete="off">
-    <label>Machine code ② (second device, optional)</label>
-    <input id="m2" maxlength="16" placeholder="(optional)" autocomplete="off">
-    <label>Machine code ③ (third device, optional)</label>
-    <input id="m3" maxlength="16" placeholder="(optional)" autocomplete="off">
-
-    <button id="goBtn" onclick="getCodes()">Get codes</button>
-    <div id="msg"></div>
-    <div class="codebox" id="codes"></div>
-  </div>
-
-  <h2>Notes</h2>
+<div class="card">
+  <h1>Activation now happens inside the app</h1>
+  <p>No web page, no order ID, nothing to copy or type.</p>
   <ol>
-    <li>Each device uses one activation code bound to its machine code. Enter it in the app's Playback settings → Unlock full version.</li>
-    <li>Up to <strong>3 devices per order</strong>. Requesting a code for an already-issued machine re-sends the same code without using your replacement quota.</li>
-    <li>For a <strong>replacement device</strong> (old one no longer in use), contact support@lumenplay.app with your original order ID to release the old device, then enter the original order ID plus the new machine code here. Maximum 3 devices per order — if full, please contact support first.</li>
-    <li>Codes are also emailed to your purchase address — keep that email. <a href="refund-en.html">Refund policy</a> · <a href="terms-en.html">Terms</a>.</li>
+    <li>On a phone or tablet that is <strong>already unlocked</strong>, open LumenPlay;</li>
+    <li>Go to <strong>Playback settings &rarr; Paid features</strong> and tap <strong>Scan to activate another device</strong>;</li>
+    <li>Scan the QR code shown on the device you want to activate. It unlocks within seconds.</li>
   </ol>
-
-  <footer>
-    <a href="index-en.html">← Back to LumenPlay</a> ·
-    <a href="mailto:support@lumenplay.app">support@lumenplay.app</a>
-  </footer>
+  <p>The device you want to activate shows that QR code (and a short number) in its unlock window.</p>
+  <p><a href="index-en.html">Back to LumenPlay</a> · Need help? <a href="mailto:support@lumenplay.app">support@lumenplay.app</a></p>
 </div>
-
-<script>
-// Fill with the deployed Worker URL after deployment
-const WORKER_URL = "https://lumenplay.app/pay/issue";
-
-async function getCodes() {
-  const msg = document.getElementById("msg");
-  const box = document.getElementById("codes");
-  const btn = document.getElementById("goBtn");
-  const orderId = document.getElementById("orderId").value.trim();
-  const machines = ["m1", "m2", "m3"]
-    .map((id) => document.getElementById(id).value.trim().toLowerCase())
-    .filter(Boolean);
-
-  msg.className = ""; msg.textContent = ""; box.innerHTML = "";
-  // Shape check only — do not encode Paddle's ID format (its prefix/length is an
-  // internal detail; hard-coding it blocks real buyers when Paddle changes it)
-  if (!/^[A-Za-z0-9_.:-]{4,128}$/.test(orderId)) {
-    msg.className = "err"; msg.textContent = "Invalid order ID: paste the full order ID from your purchase confirmation email."; return;
-  }
-  if (machines.length === 0) {
-    msg.className = "err"; msg.textContent = "Enter at least one machine code (copy it from the app's unlock dialog)."; return;
-  }
-  for (const mch of machines) {
-    if (!/^[0-9a-f]{16}$/.test(mch)) {
-      msg.className = "err"; msg.textContent = "Machine codes must be 16 hex characters (0-9 a-f): `" + mch + "`"; return;
-    }
-  }
-
-  btn.disabled = true;
-  try {
-    const r = await fetch(WORKER_URL, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ order_id: orderId, machines }),
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      msg.className = "err"; msg.textContent = data.error || "Request failed. Please try again later or email support@lumenplay.app.";
-      return;
-    }
-    msg.className = "ok";
-    msg.textContent = "✅ Codes generated" + (data.emailed_to ? " and emailed to " + data.emailed_to : "") + ".";
-    for (const c of data.codes) {
-      const div = document.createElement("div");
-      div.className = "codeitem";
-      div.innerHTML = "Machine: " + c.machine + "<br>Activation code: " + c.code;
-      box.appendChild(div);
-    }
-  } catch (e) {
-    msg.className = "err"; msg.textContent = "Network error, please try again later or email support@lumenplay.app.";
-  } finally {
-    btn.disabled = false;
-  }
-}
-</script>
 </body>
 </html>
